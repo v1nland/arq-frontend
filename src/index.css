@@ -278,7 +278,7 @@ code {
 }
 
 .timeline > li > .timeline-badge {
-    z-index: 100;
+    z-index: 20;
     position: absolute;
     top: 16px;
     left: 50%;
@@ -396,6 +396,48 @@ code {
 .profile-data-badge{
     vertical-align: middle;
     margin-top: -0.3em;
+}
+
+/* Login requirement */
+.overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: block; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #2c2c54;
+    z-index: 30; /* Specify a stack order in case you're using a different order for other elements */
+}
+
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 50px;
+    color: white;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
+
+.login-form {
+    min-width: 250px;
+    max-width: 600px;
+    padding: 1em;
+    margin: 1em;
+    vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+}
+
+/* Form stuff */
+.form{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 @media(max-width:575px) {

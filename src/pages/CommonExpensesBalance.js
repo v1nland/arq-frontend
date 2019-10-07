@@ -18,30 +18,18 @@ class CommonExpensesBalance extends Component {
         }
     }
 
-    MonthChanger(month){
-        this.setState({ mes: month });
-    }
-
     render(){
         const { mes } = this.state;
 
         return(
             <div>
                 <AlertsHandler onRef={ref => (this.AlertsHandler = ref)} />
-                <PageTitle text="Gastos comunes" />
+                <PageTitle text="Pago de gastos comunes" />
 
                 <Card>
                     <Card.Header>
                         <Row>
-                            <Col style={{marginTop:"0.4%"}}><span>{'Balance de gastos comunes: ' + mes}</span></Col>
-
-                            <Col>
-                                <DropdownButton size="sm" title="Escoger mes" style={{textAlign:'right'}}>
-                                    <Dropdown.Item onClick={() => this.MonthChanger('Enero')}>Enero</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => this.MonthChanger('Febrero')}>Febrero</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => this.MonthChanger('Marzo')}>Marzo</Dropdown.Item>
-                                </DropdownButton>
-                            </Col>
+                            <Col><span>{'Balance de gastos comunes: ' + mes}</span></Col>
                         </Row>
                     </Card.Header>
 
@@ -51,10 +39,9 @@ class CommonExpensesBalance extends Component {
                                 <th>#</th>
                                 <th>Fecha</th>
                                 <th>Dueño</th>
-                                <th>Monto pagado</th>
-                                <th>Por pagar</th>
-                                <th>Por pagar (mes anterior)</th>
-                                <th>Balance</th>
+                                <th>Gasto común</th>
+                                <th>Pago</th>
+                                <th>Saldo</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,9 +50,8 @@ class CommonExpensesBalance extends Component {
                                 <td>01/01/2019</td>
                                 <td>Martín Saavedra</td>
                                 <td>1000</td>
-                                <td>500</td>
-                                <td>0</td>
-                                <td>500</td>
+                                <td>400</td>
+                                <td>-600</td>
                             </tr>
 
                             <tr>
@@ -74,8 +60,7 @@ class CommonExpensesBalance extends Component {
                                 <td>Paula Núñez</td>
                                 <td>2000</td>
                                 <td>1000</td>
-                                <td>0</td>
-                                <td>1000</td>
+                                <td>-1000</td>
                             </tr>
 
                             <tr>
@@ -84,8 +69,7 @@ class CommonExpensesBalance extends Component {
                                 <td>Miguel Saavedra</td>
                                 <td>1000</td>
                                 <td>2000</td>
-                                <td>500</td>
-                                <td>-1500</td>
+                                <td>1000</td>
                             </tr>
                         </tbody>
                     </Table>

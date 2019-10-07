@@ -40,13 +40,20 @@ class SendTicket extends Component {
                         <Form onSubmit={this.HandleTicketForm} id="ticketForm">
                             <Form.Row>
                                 <Form.Group as={Col} controlId="formGridEmail">
-                                    <Form.Label>Su e-mail</Form.Label>
+                                    <Form.Label>E-mail</Form.Label>
                                     <Form.Control type="email" placeholder="Ingresa tu correo" />
                                 </Form.Group>
 
                                 <Form.Group as={Col} controlId="formGridDpto">
-                                    <Form.Label>Número de departamento</Form.Label>
+                                    <Form.Label>Número dpto.</Form.Label>
                                     <Form.Control type="number" min="1000" max="2600" placeholder="2005" />
+                                </Form.Group>
+                            </Form.Row>
+
+                            <Form.Row>
+                                <Form.Group as={Col} controlId="formGridDate">
+                                    <Form.Label>Fecha</Form.Label>
+                                    <Form.Control type="date" placeholder="dd/MM/yy" />
                                 </Form.Group>
                             </Form.Row>
 

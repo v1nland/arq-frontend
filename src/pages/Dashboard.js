@@ -88,8 +88,8 @@ class Dashboard extends Component {
                         <Card>
                             <Card.Header>Gráfico</Card.Header>
 
-                            <ResponsiveContainer width="100%" aspect={2}>
-                                <BarChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }} >
+                            <ResponsiveContainer width="90%" aspect={2}>
+                                <BarChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }} >
                                     <CartesianGrid stroke="#ccc" />
                                     <XAxis dataKey="name" />
                                     <YAxis />

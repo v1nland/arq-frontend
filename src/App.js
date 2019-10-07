@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { HashRouter, BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Navigation from './components/Navigation/Navigation';
+import RequireLogin from './components/Login/RequireLogin';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Neighbors from './pages/Neighbors';
@@ -14,6 +15,8 @@ class App extends Component {
     render(){
         return (
             <HashRouter>
+                <RequireLogin />
+                
                 <div className="App">
                     <Navigation />
 

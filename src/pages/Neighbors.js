@@ -35,9 +35,10 @@ class Neighbors extends Component{
                                 <th>Dueño</th>
                                 <th>Arrendatario</th>
                                 <th>Contacto</th>
+                                <th>E-mail</th>
                                 <th>Bodega</th>
                                 <th>Estacionamiento</th>
-                                <th>Prorrat.</th>
+                                <th>Prorrateo</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,6 +47,7 @@ class Neighbors extends Component{
                                 <td>Martín Saavedra</td>
                                 <td>Juan Pérez</td>
                                 <td>+569 50731812</td>
+                                <td>martinroony@gmail.com</td>
                                 <td>101</td>
                                 <td>96 (DB-DX-79)</td>
                                 <td>0.1%</td>
@@ -56,6 +58,7 @@ class Neighbors extends Component{
                                 <td>Paula Núñez</td>
                                 <td>Juana Pérez</td>
                                 <td>+569 50731813</td>
+                                <td>paula.nunezv@gmail.com</td>
                                 <td>102</td>
                                 <td>97 (DB-DX-80)</td>
                                 <td>0.2%</td>
@@ -66,6 +69,7 @@ class Neighbors extends Component{
                                 <td>Miguel Saavedra</td>
                                 <td>Juanito Pérez</td>
                                 <td>+569 50731814</td>
+                                <td>vycsaavedra@gmail.com</td>
                                 <td>103</td>
                                 <td>98 (DB-DX-81)</td>
                                 <td>0.3%</td>

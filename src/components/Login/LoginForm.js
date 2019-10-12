@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { Card, Form, Col, Button } from 'react-bootstrap';
+import { Card, Form, Col, Button, Tab, Tabs, Row, Nav } from 'react-bootstrap';
+
+// Forms
+import UserLoginForm from './UserLoginForm';
+import NeighborLoginForm from './NeighborLoginForm';
 
 // Utility components
 import CenteredSpinner from '../Utility/CenteredSpinner';
@@ -18,33 +22,43 @@ class LoginForm extends Component{
     render(){
         return(
             <div className="login-form">
-                <Card className="text-center" bg="info" text="white">
-                    <Card.Header><b>Debes iniciar sesión antes de visitar el sitio</b></Card.Header>
+                <Tab.Container id="login-tabs" defaultActiveKey={1}>
+                    <Row>
+                        <Col sm={3}>
+                            <Nav variant="pills" className="flex-column">
+                                <Tab.Content>
+                                    <Nav.Item>
+                                        <Nav.Link eventKey={1}>
+                                            Ingreso Administrador
+                                        </Nav.Link>
+                                    </Nav.Item>
 
-                    <Card.Body>
-                        <Form onSubmit={ this.props.onSubmit } id="loginForm">
-                            <Form.Row>
-                                <Form.Group as={Col} controlId="formGridEmail">
-                                    <Form.Label>Número dpto.</Form.Label>
-                                    <Form.Control type="number" placeholder="2401" />
-                                </Form.Group>
-                            </Form.Row>
+                                    <Nav.Item>
+                                        <Nav.Link eventKey={2}>
+                                            Ingreso Residentes
+                                        </Nav.Link>
+                                    </Nav.Item>
+                                </Tab.Content>
+                            </Nav>
+                        </Col>
 
-                            <Form.Row>
-                                <Form.Group as={Col} controlId="formGridPass">
-                                    <Form.Label>Contraseña</Form.Label>
-                                    <Form.Control type="password" placeholder="******" />
-                                </Form.Group>
-                            </Form.Row>
-                        </Form>
-                    </Card.Body>
+                        <Col sm={9}>
+                            <Tab.Content>
+                                <Tab.Pane eventKey={1}>
+                                    <UserLoginForm
+                                        onSubmit={this.props.onSubmitUserForm}
+                                    />
+                                </Tab.Pane>
 
-                    <Card.Footer className="text-center">
-                        <Button form="loginForm" type="submit">
-                            Iniciar sesión
-                        </Button>
-                    </Card.Footer>
-                </Card>
+                                <Tab.Pane eventKey={2}>
+                                    <NeighborLoginForm
+                                        onSubmit={this.props.onSubmitNeighborForm}
+                                    />
+                                </Tab.Pane>
+                            </Tab.Content>
+                        </Col>
+                    </Row>
+                </Tab.Container>
             </div>
         );
     }

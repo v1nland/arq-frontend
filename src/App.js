@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter, BrowserRouter as Router, Route } from 'react-router-dom';
+import { HashRouter as Router, Route } from 'react-router-dom';
 
 import Navigation from './components/Navigation/Navigation';
 import RequireLogin from './components/Login/RequireLogin';
@@ -14,23 +14,25 @@ import CommonExpensesBalance from './pages/CommonExpensesBalance';
 class App extends Component {
     render(){
         return (
-            <HashRouter>
-                <RequireLogin />
-                
-                <div className="App">
-                    <Navigation />
 
-                    <div className="page-wrapper">
-                        <Route exact path="/" component={ Dashboard } />
-                        <Route exact path="/Profile" component={ Profile } />
-                        <Route exact path="/Neighbors" component={ Neighbors } />
-                        <Route exact path="/SendTicket" component={ SendTicket } />
-                        <Route exact path="/ViewTickets" component={ ViewTickets } />
-                        <Route exact path="/UploadCommonExpenses" component={ UploadCommonExpenses } />
-                        <Route exact path="/CommonExpensesBalance" component={ CommonExpensesBalance } />
-                    </div>
-                </div>
-            </HashRouter>
+                <RequireLogin
+                    appComponent={<Router>
+                                    <div className="App">
+                                        <Navigation />
+
+                                        <div className="page-wrapper">
+                                            <Route exact path="/" component={ Dashboard } />
+                                            <Route exact path="/Profile" component={ Profile } />
+                                            <Route exact path="/Neighbors" component={ Neighbors } />
+                                            <Route exact path="/SendTicket" component={ SendTicket } />
+                                            <Route exact path="/ViewTickets" component={ ViewTickets } />
+                                            <Route exact path="/UploadCommonExpenses" component={ UploadCommonExpenses } />
+                                            <Route exact path="/CommonExpensesBalance" component={ CommonExpensesBalance } />
+                                        </div>
+                                    </div>
+                                </Router>}
+                />
+
         );
     }
 }

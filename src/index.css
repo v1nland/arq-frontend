@@ -25,6 +25,27 @@ code {
     text-align: left;
 }
 
+/* Tab stuff */
+.tab-content{
+    text-align: center;
+    max-height: 80vh;
+    background-color: white;
+    padding: 4%;
+    border-left: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+    overflow-x: hidden;
+
+    border-radius: 5px;
+}
+.nav-tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+}
+
 /* Side bar CSS */
 .nav-side-menu {
     overflow: auto; font-family: verdana; font-size: 14px;
@@ -408,7 +429,13 @@ code {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #2c2c54;
+    background:
+        linear-gradient(135deg, #3c6382 25%, transparent 25%) -50px 0,
+        linear-gradient(225deg, #3c6382 25%, transparent 25%) -50px 0,
+        linear-gradient(315deg, #3c6382 25%, transparent 25%),
+        linear-gradient(45deg, #3c6382 25%, transparent 25%);
+    background-size: 2em 2em;
+    background-color: #0a3d62;
     z-index: 30; /* Specify a stack order in case you're using a different order for other elements */
 }
 

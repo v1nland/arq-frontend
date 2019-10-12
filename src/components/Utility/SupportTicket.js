@@ -20,7 +20,7 @@ class SupportTicket extends Component{
                 </Card.Header>
 
                 <Accordion.Collapse eventKey={this.props.id}>
-                    <Card.Body>
+                    <Card.Body style={{color:"white"}}>
                         <p>{this.props.body}</p>
 
                         {this.props.responseButton}

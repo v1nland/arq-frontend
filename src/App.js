@@ -14,25 +14,21 @@ import CommonExpensesBalance from './pages/CommonExpensesBalance';
 class App extends Component {
     render(){
         return (
-
                 <RequireLogin
                     appComponent={<Router>
-                                    <div className="App">
-                                        <Navigation />
+                                    <Navigation />
 
-                                        <div className="page-wrapper">
-                                            <Route exact path="/" component={ Dashboard } />
-                                            <Route exact path="/Profile" component={ Profile } />
-                                            <Route exact path="/Neighbors" component={ Neighbors } />
-                                            <Route exact path="/SendTicket" component={ SendTicket } />
-                                            <Route exact path="/ViewTickets" component={ ViewTickets } />
-                                            <Route exact path="/UploadCommonExpenses" component={ UploadCommonExpenses } />
-                                            <Route exact path="/CommonExpensesBalance" component={ CommonExpensesBalance } />
-                                        </div>
+                                    <div className="page-wrapper">
+                                        <Route exact path="/" component={ Dashboard } />
+                                        <Route exact path="/Profile" component={ Profile } />
+                                        <Route exact path="/Neighbors" component={ Neighbors } />
+                                        <Route exact path="/SendTicket" component={ SendTicket } />
+                                        <Route exact path="/ViewTickets" component={ ViewTickets } />
+                                        <Route exact path="/UploadCommonExpenses" component={ UploadCommonExpenses } />
+                                        <Route exact path="/CommonExpensesBalance" component={ CommonExpensesBalance } />
                                     </div>
                                 </Router>}
                 />
-
         );
     }
 }

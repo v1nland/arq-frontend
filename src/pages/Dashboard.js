@@ -5,13 +5,14 @@ import { Row, Col, Card, CardDeck, Dropdown, DropdownButton } from 'react-bootst
 // Components
 import StatWidget from '../components/Widget/Widget';
 import Donut from '../components/Donut/Donut';
+import BarGraph from '../components/BarGraph/BarGraph';
 import TimelineElement from '../components/Utility/TimelineElement';
 
 // Utility components
 import CenteredSpinner from '../components/Utility/CenteredSpinner';
 import PageTitle from '../components/Utility/PageTitle';
 import AlertsHandler from '../components/Utility/AlertsHandler';
-import { Tooltip, XAxis, YAxis, Area, CartesianGrid, AreaChart, Bar, BarChart, ResponsiveContainer } from '../vendor/recharts';
+import { Tooltip, XAxis, YAxis, Area, CartesianGrid, AreaChart, Bar, ResponsiveContainer } from '../vendor/recharts';
 
 const data = [
       { name: 'Page A', uv: 4000, pv: 2400, amt: 2400, value: 600 },
@@ -88,17 +89,7 @@ class Dashboard extends Component {
                         <Card>
                             <Card.Header>Gráfico</Card.Header>
 
-                            <ResponsiveContainer width="90%" aspect={2}>
-                                <BarChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }} >
-                                    <CartesianGrid stroke="#ccc" />
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Bar dataKey="pv" stackId="1" fill="#8884d8" />
-                                    <Bar dataKey="uv" stackId="1" fill="#82ca9d" />
-                                    <Bar type="monotone" dataKey="amt" fill="#ffc658" />
-                                </BarChart>
-                            </ResponsiveContainer>
+                                <BarGraph data={data} />
                         </Card>
                     </Col>
 

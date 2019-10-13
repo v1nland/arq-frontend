@@ -16,13 +16,19 @@ class Navigation extends Component{
 
                 <div className="menu-list">
                     <ul id="menu-content" className="menu-content collapse out">
-                        <li>
-                            <Link to="/">
-                                <div className="button-wrapper">
-                                    <FontAwesomeIcon icon={faTachometerAlt} fixedWidth /> Escritorio
-                                </div>
-                            </Link>
-                        </li>
+                        {
+                            sessionStorage.getItem('Level') === 'admin'?
+                            <li>
+                                <Link to="/">
+                                    <div className="button-wrapper">
+                                        <FontAwesomeIcon icon={faTachometerAlt} fixedWidth /> Escritorio
+                                    </div>
+                                </Link>
+                            </li>
+                            :
+                            null
+                        }
+
 
                         <li>
                             <Link to="/Profile">
@@ -32,45 +38,70 @@ class Navigation extends Component{
                             </Link>
                         </li>
 
-                        <li>
-                            <Link to="/Neighbors">
-                                <div className="button-wrapper">
-                                    <FontAwesomeIcon icon={faUsers} fixedWidth /> Datos vecinos
-                                </div>
-                            </Link>
-                        </li>
+                        {
+                            sessionStorage.getItem('Level') === 'admin'?
+                            <li>
+                                <Link to="/Neighbors">
+                                    <div className="button-wrapper">
+                                        <FontAwesomeIcon icon={faUsers} fixedWidth /> Datos vecinos
+                                    </div>
+                                </Link>
+                            </li>
+                            :
+                            null
+                        }
 
-                        <li>
-                            <Link to="/SendTicket">
-                                <div className="button-wrapper">
-                                    <FontAwesomeIcon icon={faTicketAlt} fixedWidth /> Enviar ticket
-                                </div>
-                            </Link>
-                        </li>
+                        {
+                            sessionStorage.getItem('Level') === 'user'?
+                            <li>
+                                <Link to="/SendTicket">
+                                    <div className="button-wrapper">
+                                        <FontAwesomeIcon icon={faTicketAlt} fixedWidth /> Enviar ticket
+                                    </div>
+                                </Link>
+                            </li>
+                            :
+                            null
+                        }
 
-                        <li>
-                            <Link to="/ViewTickets">
-                                <div className="button-wrapper">
-                                    <FontAwesomeIcon icon={faTicketAlt} fixedWidth /> Ver tickets
-                                </div>
-                            </Link>
-                        </li>
+                        {
+                            sessionStorage.getItem('Level') === 'admin'?
+                            <li>
+                                <Link to="/ViewTickets">
+                                    <div className="button-wrapper">
+                                        <FontAwesomeIcon icon={faTicketAlt} fixedWidth /> Ver tickets
+                                    </div>
+                                </Link>
+                            </li>
+                            :
+                            null
+                        }
 
-                        <li>
-                            <Link to="/UploadCommonExpenses">
-                                <div className="button-wrapper">
-                                    <FontAwesomeIcon icon={faCreditCard} fixedWidth /> Subir gastos comunes
-                                </div>
-                            </Link>
-                        </li>
+                        {
+                            sessionStorage.getItem('Level') === 'admin'?
+                            <li>
+                                <Link to="/UploadCommonExpenses">
+                                    <div className="button-wrapper">
+                                        <FontAwesomeIcon icon={faCreditCard} fixedWidth /> Subir gastos comunes
+                                    </div>
+                                </Link>
+                            </li>
+                            :
+                            null
+                        }
 
-                        <li>
-                            <Link to="/CommonExpensesBalance">
-                                <div className="button-wrapper">
-                                    <FontAwesomeIcon icon={faBalanceScale} fixedWidth /> Balance gastos comunes
-                                </div>
-                            </Link>
-                        </li>
+                        {
+                            sessionStorage.getItem('Level') === 'admin'?
+                            <li>
+                                <Link to="/CommonExpensesBalance">
+                                    <div className="button-wrapper">
+                                        <FontAwesomeIcon icon={faBalanceScale} fixedWidth /> Balance gastos comunes
+                                    </div>
+                                </Link>
+                            </li>
+                            :
+                            null
+                        }
                     </ul>
                 </div>
             </div>

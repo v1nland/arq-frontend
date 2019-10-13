@@ -90,21 +90,21 @@ class Donut extends Component {
 
   render() {
     return (
-      <ResponsiveContainer width="90%" aspect={2} >
-        <PieCharts
-          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-          onMouseEnter={(data, index) => { this.onPieEnter(data, index); }}
-        >
-          <Pie
-            activeIndex={this.state.activeIndex}
-            activeShape={renderActiveShape}
-            data={this.props.data}
-            innerRadius={this.props.innerRadius}
-            outerRadius={this.props.outerRadius}
-            fill={this.props.color}
-          />
-        </PieCharts>
-      </ResponsiveContainer>
+        <ResponsiveContainer width="90%" aspect={2} >
+            <PieCharts
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                onMouseEnter={(data, index) => { this.onPieEnter(data, index); }}
+            >
+                <Pie
+                    activeIndex={this.state.activeIndex}
+                    activeShape={renderActiveShape}
+                    data={this.props.data}
+                    innerRadius={this.props.innerRadius}
+                    outerRadius={this.props.outerRadius}
+                    fill={this.props.color}
+                />
+            </PieCharts>
+        </ResponsiveContainer>
     );
   }
 

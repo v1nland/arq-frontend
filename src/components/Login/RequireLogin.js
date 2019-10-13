@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Card, Form, Col, Button } from 'react-bootstrap';
 
+import { Clean, FormatRUT } from '../../functions/RUT'
+
 // Utility components
 import CenteredSpinner from '../Utility/CenteredSpinner';
 import PageTitle from '../Utility/PageTitle';
@@ -20,34 +22,21 @@ class RequireLogin extends Component{
         }
     }
 
-    Clean (rut) {
-        return typeof rut === 'string'
-        ? rut.replace(/^0+|[^0-9kK]+/g, '').toUpperCase()
-        : ''
-    }
-
-    FormatRUT (rut) {
-        rut = this.Clean(rut)
-        var result = rut.slice(-4, -1) + '-' + rut.substr(rut.length - 1)
-
-        for (var i = 4; i < rut.length; i += 3)
-            result = rut.slice(-3 - i, -i) + '.' + result
-
-        return result
-    }
-
     HandleUserLoginForm(event){
         event.preventDefault();
 
-        if (this.FormatRUT(event.target[0].value) === "19.932.690-2" && event.target[1].value === "123") {
+        if (FormatRUT(event.target[0].value) === "19.932.690-2" && event.target[1].value === "123") {
             console.log("Logged in");
             this.AlertsHandler.generate('success', '¡Genial!', 'Iniciaste sesión exitosamente.');
 
+            sessionStorage.setItem('IsLoggedIn', true);
+            sessionStorage.setItem('Level', 'admin');
             this.setState({ IsLoggedIn: true })
         }else{
             console.log("Failed to login");
             this.AlertsHandler.generate('danger', '¡Error!', 'Credenciales incorrectas.');
 
+            sessionStorage.setItem('IsLoggedIn', false);
             this.setState({ IsLoggedIn: false })
         }
     }
@@ -59,11 +48,14 @@ class RequireLogin extends Component{
             console.log("Logged in");
             this.AlertsHandler.generate('success', '¡Genial!', 'Iniciaste sesión exitosamente.');
 
+            sessionStorage.setItem('IsLoggedIn', true);
+            sessionStorage.setItem('Level', 'user');
             this.setState({ IsLoggedIn: true })
         }else{
             console.log("Failed to login");
             this.AlertsHandler.generate('danger', '¡Error!', 'Credenciales incorrectas.');
 
+            sessionStorage.setItem('IsLoggedIn', false);
             this.setState({ IsLoggedIn: false })
         }
     }
@@ -74,7 +66,7 @@ class RequireLogin extends Component{
                 <AlertsHandler onRef={ref => (this.AlertsHandler = ref)} />
 
                 {
-                    this.state.IsLoggedIn ?
+                    sessionStorage.getItem('IsLoggedIn') === 'true' ?
                     this.props.appComponent
                     :
                     <Overlay

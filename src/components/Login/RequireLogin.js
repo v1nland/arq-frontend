@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Card, Form, Col, Button } from 'react-bootstrap';
 
 import { Clean, FormatRUT } from '../../functions/RUT'
+import { CreateAndStoreToken, VerifyToken, GetSecretKey } from '../../functions/JWT'
+import { FetchCondominios } from '../../functions/Database'
 
 // Utility components
 import CenteredSpinner from '../Utility/CenteredSpinner';
@@ -18,26 +20,26 @@ class RequireLogin extends Component{
         this.HandleNeighborLoginForm = this.HandleNeighborLoginForm.bind(this);
 
         this.state = {
-            IsLoggedIn: false
+            IsTokenValid: false
         }
+    }
+
+    componentDidMount(){
+        console.log( FetchCondominios('') );
     }
 
     HandleUserLoginForm(event){
         event.preventDefault();
 
         if (FormatRUT(event.target[0].value) === "19.932.690-2" && event.target[1].value === "123") {
-            console.log("Logged in");
             this.AlertsHandler.generate('success', '¡Genial!', 'Iniciaste sesión exitosamente.');
 
-            sessionStorage.setItem('IsLoggedIn', true);
-            sessionStorage.setItem('Level', 'admin');
-            this.setState({ IsLoggedIn: true })
+            //generate and save token on sessionStorage
+            CreateAndStoreToken( { user: FormatRUT(event.target[0].value), level: 'admin' }, GetSecretKey() )
+            this.setState({ IsTokenValid: true })
         }else{
-            console.log("Failed to login");
+            this.setState({ IsTokenValid: false })
             this.AlertsHandler.generate('danger', '¡Error!', 'Credenciales incorrectas.');
-
-            sessionStorage.setItem('IsLoggedIn', false);
-            this.setState({ IsLoggedIn: false })
         }
     }
 
@@ -45,18 +47,14 @@ class RequireLogin extends Component{
         event.preventDefault();
 
         if (event.target[0].value === "ARQSM" && event.target[1].value === "2401" && event.target[2].value === "123") {
-            console.log("Logged in");
             this.AlertsHandler.generate('success', '¡Genial!', 'Iniciaste sesión exitosamente.');
 
-            sessionStorage.setItem('IsLoggedIn', true);
-            sessionStorage.setItem('Level', 'user');
-            this.setState({ IsLoggedIn: true })
+            //generate and save token on sessionStorage
+            CreateAndStoreToken( { condCode: event.target[0].value, userDpto: event.target[1].value, level: 'user' }, GetSecretKey() )
+            this.setState({ IsTokenValid: true })
         }else{
-            console.log("Failed to login");
             this.AlertsHandler.generate('danger', '¡Error!', 'Credenciales incorrectas.');
-
-            sessionStorage.setItem('IsLoggedIn', false);
-            this.setState({ IsLoggedIn: false })
+            this.setState({ IsTokenValid: false })
         }
     }
 
@@ -66,7 +64,7 @@ class RequireLogin extends Component{
                 <AlertsHandler onRef={ref => (this.AlertsHandler = ref)} />
 
                 {
-                    sessionStorage.getItem('IsLoggedIn') === 'true' ?
+                    VerifyToken( sessionStorage.getItem("token"), GetSecretKey() ) || this.state.IsTokenValid ?
                     this.props.appComponent
                     :
                     <Overlay

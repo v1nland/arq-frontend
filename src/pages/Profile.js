@@ -14,14 +14,6 @@ import { faUserLock, faUser, faHome, faDoorClosed, faLock, faParking } from '@fo
 import Picture from '../images/profile.jpg';
 
 class Profile extends Component{
-    constructor(props, context){
-        super(props, context);
-
-        this.state = {
-
-        }
-    }
-
     render(){
         return(
             <div>
@@ -35,7 +27,7 @@ class Profile extends Component{
                         <Card.Body>
                             <Row>
                                 <Col>
-                                    <Image className="profile-picture" src={Picture} roundedCircle responsive/>
+                                    <Image className="profile-picture" src={Picture} roundedCircle />
                                 </Col>
                             </Row>
 
@@ -75,7 +67,7 @@ class Profile extends Component{
                     </Card>
 
                     <Card>
-                        <Card.Header>Mis tickets</Card.Header>
+                        <Card.Header>Mis tickets enviados</Card.Header>
 
                         <Card.Body>
                             <Accordion>

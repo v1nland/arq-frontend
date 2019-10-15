@@ -25,7 +25,7 @@ class NeighborLoginForm extends Component{
                     </Form.Row>
 
                     <Form.Row>
-                        <Form.Group as={Col} controlId="formGridPass">
+                        <Form.Group as={Col} controlId="formGridNumber">
                             <Form.Label>Ingresa número de dpto.</Form.Label>
                             <Form.Control type="number" placeholder="2401" />
                         </Form.Group>

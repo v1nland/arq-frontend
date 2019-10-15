@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { GetUserPermissions, GetSecretKey } from '../../functions/JWT'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faBuilding, faTachometerAlt, faUser, faUsers, faTicketAlt, faCreditCard, faBalanceScale } from '@fortawesome/free-solid-svg-icons';
@@ -17,7 +18,7 @@ class Navigation extends Component{
                 <div className="menu-list">
                     <ul id="menu-content" className="menu-content collapse out">
                         {
-                            sessionStorage.getItem('Level') === 'admin'?
+                            GetUserPermissions( sessionStorage.getItem("token"), GetSecretKey() ) === 'admin'?
                             <li>
                                 <Link to="/">
                                     <div className="button-wrapper">
@@ -39,7 +40,7 @@ class Navigation extends Component{
                         </li>
 
                         {
-                            sessionStorage.getItem('Level') === 'admin'?
+                            GetUserPermissions( sessionStorage.getItem("token"), GetSecretKey() ) === 'admin'?
                             <li>
                                 <Link to="/Neighbors">
                                     <div className="button-wrapper">
@@ -52,7 +53,7 @@ class Navigation extends Component{
                         }
 
                         {
-                            sessionStorage.getItem('Level') === 'user'?
+                            GetUserPermissions( sessionStorage.getItem("token"), GetSecretKey() ) === 'user'?
                             <li>
                                 <Link to="/SendTicket">
                                     <div className="button-wrapper">
@@ -65,7 +66,7 @@ class Navigation extends Component{
                         }
 
                         {
-                            sessionStorage.getItem('Level') === 'admin'?
+                            GetUserPermissions( sessionStorage.getItem("token"), GetSecretKey() ) === 'admin'?
                             <li>
                                 <Link to="/ViewTickets">
                                     <div className="button-wrapper">
@@ -78,7 +79,7 @@ class Navigation extends Component{
                         }
 
                         {
-                            sessionStorage.getItem('Level') === 'admin'?
+                            GetUserPermissions( sessionStorage.getItem("token"), GetSecretKey() ) === 'admin'?
                             <li>
                                 <Link to="/UploadCommonExpenses">
                                     <div className="button-wrapper">
@@ -91,7 +92,7 @@ class Navigation extends Component{
                         }
 
                         {
-                            sessionStorage.getItem('Level') === 'admin'?
+                            GetUserPermissions( sessionStorage.getItem("token"), GetSecretKey() ) === 'admin'?
                             <li>
                                 <Link to="/CommonExpensesBalance">
                                     <div className="button-wrapper">

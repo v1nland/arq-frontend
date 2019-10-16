@@ -25,7 +25,8 @@ class RequireLogin extends Component{
     }
 
     componentDidMount(){
-        console.log( FetchCondominios('') );
+        // console.log( FetchCondominios('2') );
+        FetchCondominios('').then(res => console.log(res));
     }
 
     HandleUserLoginForm(event){

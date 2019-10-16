@@ -1,16 +1,17 @@
-export function FetchCondominios( id ) {
-    var FetchURL = `${APIURL()}/Condominios/${id}`;
+export function APIURL(){
+    return 'http://localhost:8080'
+}
 
-    fetch(FetchURL)
+export function FetchCondominios( id ) {
+    var FetchURL = `${APIURL()}/Condominios${id}`;
+    console.log( FetchURL );
+
+    return fetch(FetchURL)
     .then(response => response.json())
     .then(resp => {
-        return resp.data
+        return resp
     })
     .catch(err => {
         return err
     })
-}
-
-export function APIURL(){
-    return 'http://192.168.0.17:8080'
 }

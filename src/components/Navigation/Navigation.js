@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { GetUserPermissions, GetSecretKey } from '../../functions/JWT'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faBuilding, faTachometerAlt, faUser, faUsers, faTicketAlt, faCreditCard, faBalanceScale } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faBuilding, faTachometerAlt, faUser, faUsers, faTicketAlt, faCreditCard, faBalanceScale, faShower } from '@fortawesome/free-solid-svg-icons';
 
 class Navigation extends Component{
     render(){
@@ -79,11 +79,24 @@ class Navigation extends Component{
                         }
 
                         {
+                            // GetUserPermissions( sessionStorage.getItem("token"), GetSecretKey() ) === 'admin'?
+                            // <li>
+                            //     <Link to="/UploadCommonExpenses">
+                            //         <div className="button-wrapper">
+                            //             <FontAwesomeIcon icon={faCreditCard} fixedWidth /> Subir gastos comunes
+                            //         </div>
+                            //     </Link>
+                            // </li>
+                            // :
+                            // null
+                        }
+
+                        {
                             GetUserPermissions( sessionStorage.getItem("token"), GetSecretKey() ) === 'admin'?
                             <li>
-                                <Link to="/UploadCommonExpenses">
+                                <Link to="/CommonExpensesPayments">
                                     <div className="button-wrapper">
-                                        <FontAwesomeIcon icon={faCreditCard} fixedWidth /> Subir gastos comunes
+                                        <FontAwesomeIcon icon={faCreditCard} fixedWidth /> Historial de pagos
                                     </div>
                                 </Link>
                             </li>
@@ -97,6 +110,19 @@ class Navigation extends Component{
                                 <Link to="/CommonExpensesBalance">
                                     <div className="button-wrapper">
                                         <FontAwesomeIcon icon={faBalanceScale} fixedWidth /> Balance gastos comunes
+                                    </div>
+                                </Link>
+                            </li>
+                            :
+                            null
+                        }
+
+                        {
+                            GetUserPermissions( sessionStorage.getItem("token"), GetSecretKey() ) === 'admin'?
+                            <li>
+                                <Link to="/WaterMeasure">
+                                    <div className="button-wrapper">
+                                        <FontAwesomeIcon icon={faShower} fixedWidth /> Mediciones de agua
                                     </div>
                                 </Link>
                             </li>

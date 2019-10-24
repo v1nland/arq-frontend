@@ -1,6 +1,9 @@
 // Packages
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { Row, Col, Card, CardDeck, Dropdown, DropdownButton } from 'react-bootstrap';
+
+import { VerifyToken, GetSecretKey, GetUserPermissions } from '../functions/JWT';
 
 // Components
 import StatWidget from '../components/Widget/Widget';
@@ -30,11 +33,11 @@ class Dashboard extends Component {
         }
     }
 
-    componentDidMount(){
-        // this.AlertsHandler.generate('success', '¡Genial!', 'Sitio aún bajo desarrollo.');
-    }
-
     render() {
+        if (GetUserPermissions( sessionStorage.getItem('token') ) !== 'admin') {
+            return <Redirect to="/Profile" />
+        }
+
         return (
             <div>
                 <AlertsHandler onRef={ref => (this.AlertsHandler = ref)} />

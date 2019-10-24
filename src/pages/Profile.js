@@ -8,12 +8,40 @@ import AlertsHandler from '../components/Utility/AlertsHandler';
 import SupportTicket from '../components/Utility/SupportTicket';
 import ProfileData from '../components/Utility/ProfileData';
 
+import { Logout } from '../functions/Session'
+import { FetchUserData } from '../functions/Database';
+import { FormatRUT } from '../functions/RUT'
+import { GetUserRUT, GetUserPassword } from '../functions/JWT';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserLock, faUser, faHome, faDoorClosed, faLock, faParking } from '@fortawesome/free-solid-svg-icons';
+import { faUserLock, faIdCard, faUser, faHome, faDoorClosed, faLock, faParking } from '@fortawesome/free-solid-svg-icons';
 
 import Picture from '../images/profile.jpg';
 
 class Profile extends Component{
+    constructor(props, context){
+        super(props, context);
+
+        this.state = {
+            userData: []
+        }
+    }
+
+    componentDidMount(){
+        this.GetDataFromDB();
+    }
+
+    GetDataFromDB(){
+        FetchUserData( FormatRUT( GetUserRUT( sessionStorage.getItem("token") ) ), GetUserPassword( sessionStorage.getItem("token") ) )
+        .then( res => this.setState({ userData: res }))
+    }
+
+    HandleLogout(event){
+        Logout()
+
+        window.location.reload()
+    }
+
     render(){
         return(
             <div>
@@ -32,6 +60,12 @@ class Profile extends Component{
                             </Row>
 
                             <br />
+
+                            <ProfileData
+                                icon=<FontAwesomeIcon icon={faIdCard} fixedWidth />
+                                title="RUT"
+                                value={ this.state.userData.rut }
+                            />
 
                             <ProfileData
                                 icon=<FontAwesomeIcon icon={faUser} fixedWidth />
@@ -63,6 +97,10 @@ class Profile extends Component{
                                 title="Parking"
                                 value="#96 (DB-DX-79)"
                             />
+
+                            <br />
+
+                            <center><Button variant="danger" onClick={() => this.HandleLogout()}>Cerrar sesión</Button></center>
                         </Card.Body>
                     </Card>
 

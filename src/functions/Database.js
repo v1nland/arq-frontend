@@ -1,6 +1,6 @@
 export function APIURL(){
-    // return 'https://arq-backend.herokuapp.com'
-    return 'http://192.168.0.17:8080'
+    return 'https://arq-backend.herokuapp.com'
+    // return 'http://192.168.0.17:8080'
 }
 
 export function FetchCondominios( id ) {

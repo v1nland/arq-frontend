@@ -11,7 +11,7 @@ import ProfileData from '../components/Utility/ProfileData';
 import { Logout } from '../functions/Session'
 import { FetchUserData } from '../functions/Database';
 import { FormatRUT } from '../functions/RUT'
-import { GetUserRUT, GetUserPassword } from '../functions/JWT';
+import { GetUserData } from '../functions/JWT';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserLock, faIdCard, faUser, faHome, faDoorClosed, faLock, faParking } from '@fortawesome/free-solid-svg-icons';
@@ -28,12 +28,11 @@ class Profile extends Component{
     }
 
     componentDidMount(){
-        this.GetDataFromDB();
-    }
-
-    GetDataFromDB(){
-        FetchUserData( FormatRUT( GetUserRUT( sessionStorage.getItem("token") ) ), GetUserPassword( sessionStorage.getItem("token") ) )
-        .then( res => this.setState({ userData: res }))
+        // Extract data from database
+        GetUserData()
+        .then( res => {
+            this.setState({ userData: res })
+        })
     }
 
     HandleLogout(event){

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, Form, Col, Button } from 'react-bootstrap';
 
 import { Clean, FormatRUT } from '../../functions/RUT'
-import { CreateAndStoreToken, VerifyToken } from '../../functions/JWT'
+import { VerifyToken } from '../../functions/JWT'
 import { FetchCondominios, FetchUserLogin, FetchDptoLogin } from '../../functions/Database'
 
 // Utility components
@@ -25,7 +25,11 @@ class RequireLogin extends Component{
     }
 
     componentDidMount(){
-        // FetchCondominios('').then( res => console.log(res) ); // Realiza console.log( FetchCondominios('2') );
+        // Check if user is already logged in
+        VerifyToken()
+        .then(res => {
+            this.setState({ IsTokenValid: res })
+        })
     }
 
     HandleUserLoginForm(event){
@@ -35,18 +39,20 @@ class RequireLogin extends Component{
         FetchUserLogin( FormatRUT(et[0].value), et[1].value )
         .then( res => {
             if(res.count === 1){
-                // Login succeed
+                // Give notification
                 this.AlertsHandler.generate('success', '¡Genial!', 'Iniciaste sesión exitosamente.');
-
-                CreateAndStoreToken( { user: et[0].value, password: et[1].value, level: 'admin' } )
-                this.setState({ IsTokenValid: true })
+                // Save token generated from server
+                sessionStorage.setItem('token', res.rows[0].token);
+                // Set token valid for this login
+                this.setState({ IsTokenValid: true });
             }else{
-                // Login failed
+                // Reject credentials and show notification
                 this.AlertsHandler.generate('danger', '¡Error!', 'Credenciales incorrectas.');
             }
         })
     }
 
+    // query not ready yet
     HandleNeighborLoginForm(event){
         event.preventDefault();
         const et = event.target;
@@ -54,13 +60,11 @@ class RequireLogin extends Component{
         FetchDptoLogin( et[0].value, et[1].value, et[2].value )
         .then( res => {
             if(res.count === 1){
-                // Login succeed
                 this.AlertsHandler.generate('success', '¡Genial!', 'Iniciaste sesión exitosamente.');
 
-                CreateAndStoreToken( { condCode: et[0].value, user: et[1].value, password: et[2].value, level: 'user' } )
+                // CreateAndStoreToken( { condCode: et[0].value, user: et[1].value, password: et[2].value, level: 'user' } )
                 this.setState({ IsTokenValid: true })
             }else{
-                // Login failed
                 this.AlertsHandler.generate('danger', '¡Error!', 'Credenciales incorrectas.');
             }
         })
@@ -72,7 +76,7 @@ class RequireLogin extends Component{
                 <AlertsHandler onRef={ref => (this.AlertsHandler = ref)} />
 
                 {
-                    VerifyToken( sessionStorage.getItem("token") ) || this.state.IsTokenValid ?
+                    this.state.IsTokenValid === true ?
                     this.props.appComponent
                     :
                     <Overlay

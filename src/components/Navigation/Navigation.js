@@ -6,6 +6,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faBuilding, faTachometerAlt, faUser, faUsers, faTicketAlt, faCreditCard, faBalanceScale, faShower } from '@fortawesome/free-solid-svg-icons';
 
 class Navigation extends Component{
+    constructor(props, context){
+        super(props, context)
+
+        this.state = {
+            usrLevel: ''
+        }
+    }
+
+    componentDidMount(){
+        GetUserPermissions()
+        .then(res => {
+            this.setState({ usrLevel: res })
+        })
+    }
+
     render(){
         return(
             <div className="nav-side-menu">
@@ -18,7 +33,7 @@ class Navigation extends Component{
                 <div className="menu-list">
                     <ul id="menu-content" className="menu-content collapse out">
                         {
-                            GetUserPermissions( sessionStorage.getItem("token") ) === 'admin'?
+                            this.state.usrLevel === 'admin'  ?
                             <li>
                                 <Link to="/">
                                     <div className="button-wrapper">
@@ -40,7 +55,7 @@ class Navigation extends Component{
                         </li>
 
                         {
-                            GetUserPermissions( sessionStorage.getItem("token") ) === 'admin'?
+                            this.state.usrLevel === 'admin'  ?
                             <li>
                                 <Link to="/Neighbors">
                                     <div className="button-wrapper">
@@ -53,7 +68,7 @@ class Navigation extends Component{
                         }
 
                         {
-                            GetUserPermissions( sessionStorage.getItem("token") ) === 'user'?
+                            this.state.usrLevel === 'user' ?
                             <li>
                                 <Link to="/SendTicket">
                                     <div className="button-wrapper">
@@ -66,7 +81,7 @@ class Navigation extends Component{
                         }
 
                         {
-                            GetUserPermissions( sessionStorage.getItem("token") ) === 'admin'?
+                            this.state.usrLevel === 'admin'  ?
                             <li>
                                 <Link to="/ViewTickets">
                                     <div className="button-wrapper">
@@ -79,7 +94,7 @@ class Navigation extends Component{
                         }
 
                         {
-                            // GetUserPermissions( sessionStorage.getItem("token") ) === 'admin'?
+                            // this.state.usrLevel === 'admin'  ?
                             // <li>
                             //     <Link to="/UploadCommonExpenses">
                             //         <div className="button-wrapper">
@@ -92,7 +107,7 @@ class Navigation extends Component{
                         }
 
                         {
-                            GetUserPermissions( sessionStorage.getItem("token") ) === 'admin'?
+                            this.state.usrLevel === 'admin'  ?
                             <li>
                                 <Link to="/CommonExpensesPayments">
                                     <div className="button-wrapper">
@@ -105,7 +120,7 @@ class Navigation extends Component{
                         }
 
                         {
-                            GetUserPermissions( sessionStorage.getItem("token") ) === 'admin'?
+                            this.state.usrLevel === 'admin'  ?
                             <li>
                                 <Link to="/CommonExpensesBalance">
                                     <div className="button-wrapper">
@@ -118,7 +133,7 @@ class Navigation extends Component{
                         }
 
                         {
-                            GetUserPermissions( sessionStorage.getItem("token") ) === 'admin'?
+                            this.state.usrLevel === 'admin'  ?
                             <li>
                                 <Link to="/WaterMeasure">
                                     <div className="button-wrapper">

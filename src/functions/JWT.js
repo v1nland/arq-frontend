@@ -1,39 +1,50 @@
 import jwt from 'jsonwebtoken';
+import { APIURL } from './Database';
 
-// Receives an object with parameters
-export function CreateAndStoreToken( dataToStore ){
-    var token = jwt.sign( dataToStore, GetSecretKey() );
-    sessionStorage.setItem( 'token', token );
+// Returns user token stored in sessionStorage
+export function GetUserToken(){
+    return sessionStorage.getItem("token");
 }
 
-export function VerifyToken( token ){
-    try {
-        console.log( jwt.verify( token, GetSecretKey() ) );
-        return true
-    } catch(err) {
-        console.log( err );
+// Verifies if token is valid in API
+export function VerifyToken(){
+    var FetchURL = `${APIURL()}/DatosUsuario/${GetUserToken()}`;
+
+    return fetch(FetchURL)
+    .then(response => response.json())
+    .then(resp => {
+        return resp.valid === 'true' ? true : false
+    })
+    .catch(err => {
         return false
-    }
+    })
 }
 
-export function GetUserPermissions( token ){
-    var decoded = jwt.verify( token, GetSecretKey() );
+// Decodes token in API and returns user permissions level
+export function GetUserPermissions(){
+    var FetchURL = `${APIURL()}/DatosUsuario/${GetUserToken()}`;
 
-    return decoded["level"]
+    return fetch(FetchURL)
+    .then(response => response.json())
+    .then(resp => {
+        return resp.level
+    })
+    .catch(err => {
+        return err
+    })
 }
 
-export function GetUserRUT( token ){
-    var decoded = jwt.verify( token, GetSecretKey() );
+// Decodes token in API and returns user data (id, rut, level)
+export function GetUserData(){
+    var FetchURL = `${APIURL()}/DatosUsuario/${GetUserToken()}`;
 
-    return decoded["user"]
-}
-
-export function GetUserPassword( token ){
-    var decoded = jwt.verify( token, GetSecretKey() );
-
-    return decoded["password"]
-}
-
-export function GetSecretKey(){
-    return 'jt65he4ae5ae'
+    return fetch(FetchURL)
+    .then(response => response.json())
+    .then(resp => {
+        console.log(resp);
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
 }

@@ -1,6 +1,7 @@
 export function APIURL(){
-    return 'https://arq-backend.herokuapp.com'
+    // return 'https://arq-backend.herokuapp.com'
     // return 'http://192.168.0.17:8080'
+    return 'http://localhost:8080'
 }
 
 export function FetchCondominios( id ) {
@@ -18,7 +19,9 @@ export function FetchCondominios( id ) {
 }
 
 export function FetchUserLogin( rut, pass ){
-    return fetch(`${APIURL()}/Usuarios/${rut}/${pass}`)
+    var FetchURL = `${APIURL()}/Usuarios/${rut}/${pass}`;
+
+    return fetch(FetchURL)
     .then(response => response.json())
     .then(resp => {
         return resp
@@ -33,17 +36,6 @@ export function FetchDptoLogin( cod, num, pass ){
     .then(response => response.json())
     .then(resp => {
         return resp
-    })
-    .catch(err => {
-        return err
-    })
-}
-
-export function FetchUserData( rut, pass ){
-    return fetch(`${APIURL()}/Usuarios/${rut}/${pass}`)
-    .then(response => response.json())
-    .then(resp => {
-        return resp.rows[0]
     })
     .catch(err => {
         return err

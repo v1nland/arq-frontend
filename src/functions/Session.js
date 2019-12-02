@@ -1,3 +1,4 @@
+// Deletes sessionStorage
 export function Logout(){
-    sessionStorage.removeItem( 'token' );
+    sessionStorage.removeItem( "token" );
 }

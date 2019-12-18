@@ -7,9 +7,10 @@ import PageTitle from '../components/Utility/PageTitle';
 import AlertsHandler from '../components/Utility/AlertsHandler';
 import SupportTicket from '../components/Utility/SupportTicket';
 
-import { FetchTickets } from '../functions/Database';
+import { FetchTicketsDpto } from '../functions/Database';
+import { GetUserData } from '../functions/JWT';
 
-class ViewTickets extends Component{
+class ViewUserTickets extends Component{
     constructor(props, context){
         super(props, context);
 
@@ -17,6 +18,7 @@ class ViewTickets extends Component{
 
         this.state = {
             tickets: [],
+            userData: []
         }
     }
 
@@ -25,9 +27,14 @@ class ViewTickets extends Component{
     }
 
     RefreshTickets(){
-        FetchTickets()
-        .then(res => {
-            this.setState({ tickets: res.rows })
+        GetUserData()
+        .then(r => {
+            this.setState({ userData: r.rows })
+
+            FetchTicketsDpto( r['id'] )
+            .then(res => {
+                this.setState({ tickets: res.rows })
+            })
         })
     }
 
@@ -37,11 +44,11 @@ class ViewTickets extends Component{
             color={finalizado==0 ? "danger" : "success"}
             title={`[Dpto. ${id}] ${asunto} - ${fecha}`}
             body={`CONSULTA: ${consulta}`}
-            finalizado={finalizado}
+            response={`RESPUESTA: ${respuesta}`}
+            finalizado={1}
             refresh={this.RefreshTickets}
         />
     )
-
     render(){
         const { tickets } = this.state;
 
@@ -51,10 +58,13 @@ class ViewTickets extends Component{
                 <PageTitle text="Tickets recibidos" />
 
                 <Accordion>
-                    { tickets.map( this.renderTicket ) }
+                    {tickets != null?
+                        tickets.map( this.renderTicket )
+                        :
+                        "No has enviado ningún ticket."}
                 </Accordion>
             </div>
         );
     }
 }
-export default ViewTickets;
+export default ViewUserTickets;

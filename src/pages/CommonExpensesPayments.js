@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Card, Table, Dropdown, DropdownButton } from 'react-bootstrap';
+import { MDBDataTable } from 'mdbreact';
 
 // Utility components
 import CenteredSpinner from '../components/Utility/CenteredSpinner';
@@ -9,17 +10,76 @@ import AlertsHandler from '../components/Utility/AlertsHandler';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileUpload, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
+import { FetchPagosGC, FetchDataTablesLang } from '../functions/Database';
+import { NumberWithDots } from '../functions/Helper';
+
 class CommonExpensesPayments extends Component{
     constructor(props, context){
         super(props, context);
 
         this.state = {
-            mes: 'Enero'
+            pagos: [],
+            dtlang: []
         }
+    }
+
+    componentDidMount(){
+        this.RefreshPagosGC()
+
+        FetchDataTablesLang()
+        .then(res => {
+            this.setState({ dtlang: res })
+        })
+    }
+
+    RefreshPagosGC(){
+        FetchPagosGC()
+        .then(res => {
+            this.setState({ pagos: res.rows }, () => {
+                for (var i = 0; i < this.state.pagos.length; i++) {
+                    this.state.pagos[i]['monto'] = NumberWithDots( this.state.pagos[i]['monto'] )
+                }
+            })
+            console.log( this.state.pagos );
+        })
     }
 
     render(){
         const { mes } = this.state;
+        const { pagos } = this.state;
+        const { dtlang } = this.state;
+
+        const data = {
+            columns: [
+                {
+                    label: '#',
+                    field: 'id',
+                    sort: 'asc',
+                    width: 150
+                },
+                {
+                    label: 'Fecha',
+                    field: 'fecha',
+                    sort: 'asc',
+                    width: 150
+                },
+                {
+                    label: 'Dueño (id_dpto)',
+                    field: 'id_departamentos',
+                    sort: 'asc',
+                    width: 200
+                },
+                {
+                    label: 'Monto',
+                    field: 'monto',
+                    sort: 'asc',
+                    width: 150
+                }
+            ],
+            rows: pagos,
+            language: dtlang
+        };
+
         return(
             <div>
                 <AlertsHandler onRef={ref => (this.AlertsHandler = ref)} />
@@ -28,46 +88,17 @@ class CommonExpensesPayments extends Component{
                 <Card>
                     <Card.Header>
                         <Row>
-                            <Col><span>{'Pagos realizados durante: ' + mes}</span></Col>
+                            <Col><span>Historial de pagos recibidos</span></Col>
                         </Row>
                     </Card.Header>
 
-                    <Table striped responsive>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Fecha</th>
-                                <th>Nombre</th>
-                                <th>Medio de pago</th>
-                                <th>Monto</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>201</td>
-                                <td>01/01/2019</td>
-                                <td>Martín Saavedra</td>
-                                <td>Transferencia</td>
-                                <td>500.000</td>
-                            </tr>
-
-                            <tr>
-                                <td>202</td>
-                                <td>01/01/2019</td>
-                                <td>Paula Núñez</td>
-                                <td>Efectivo</td>
-                                <td>100.000</td>
-                            </tr>
-
-                            <tr>
-                                <td>203</td>
-                                <td>01/01/2019</td>
-                                <td>Miguel Saavedra</td>
-                                <td>Efectivo</td>
-                                <td>200.000</td>
-                            </tr>
-                        </tbody>
-                    </Table>
+                    <Card.Body>
+                        <MDBDataTable
+                            striped
+                            bordered
+                            data={data}
+                        />
+                    </Card.Body>
                 </Card>
             </div>
         );

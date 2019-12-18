@@ -14,7 +14,7 @@ import { FormatRUT } from '../functions/RUT'
 import { GetUserData } from '../functions/JWT';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserLock, faIdCard, faUser, faHome, faDoorClosed, faLock, faParking } from '@fortawesome/free-solid-svg-icons';
+import { faUserLock, faIdCard, faUser, faHome, faPhone, faEnvelope, faDoorClosed, faParking } from '@fortawesome/free-solid-svg-icons';
 
 import Picture from '../images/profile.jpg';
 
@@ -28,10 +28,10 @@ class Profile extends Component{
     }
 
     componentDidMount(){
-        // Extract data from database
         GetUserData()
         .then( res => {
             this.setState({ userData: res })
+            console.log( res );
         })
     }
 
@@ -42,6 +42,7 @@ class Profile extends Component{
     }
 
     render(){
+        const { userData } = this.state;
         return(
             <div>
                 <AlertsHandler onRef={ref => (this.AlertsHandler = ref)} />
@@ -58,44 +59,99 @@ class Profile extends Component{
                                 </Col>
                             </Row>
 
-                            <br />
-
+                            {userData.rut?
                             <ProfileData
                                 icon=<FontAwesomeIcon icon={faIdCard} fixedWidth />
                                 title="RUT"
-                                value={ this.state.userData.rut }
-                            />
+                                value={ userData.rut }
+                                badge=<Badge className="profile-data-badge" pill variant="success">Comité/Administración</Badge>
+                            />:
+                            null}
 
+                            {userData.dueno?
                             <ProfileData
                                 icon=<FontAwesomeIcon icon={faUser} fixedWidth />
                                 title="Nombre"
-                                value="Martín Saavedra"
-                                badge=<Badge className="profile-data-badge" pill variant="primary">Comité</Badge>
+                                value={userData.dueno}
+                                badge=<Badge className="profile-data-badge" pill variant="primary">Propietario</Badge>
                             />
+                            :
+                            null}
 
+                            {userData.numero?
                             <ProfileData
                                 icon=<FontAwesomeIcon icon={faHome} fixedWidth />
-                                title="Tipo"
-                                value="Arrendatario"
+                                title="Dpto."
+                                value={userData.numero}
                             />
+                            :
+                            null}
 
+                            {userData.telefono?
+                            <ProfileData
+                                icon=<FontAwesomeIcon icon={faPhone} fixedWidth />
+                                title="Teléfono"
+                                value={userData.telefono}
+                            />
+                            :
+                            null}
+
+                            {userData.correo?
+                            <ProfileData
+                                icon=<FontAwesomeIcon icon={faEnvelope} fixedWidth />
+                                title="Correo"
+                                value={userData.correo}
+                            />
+                            :
+                            null}
+
+                            {userData.bodega?
                             <ProfileData
                                 icon=<FontAwesomeIcon icon={faDoorClosed} fixedWidth />
-                                title="Dpto."
-                                value="2401"
-                            />
-
-                            <ProfileData
-                                icon=<FontAwesomeIcon icon={faLock} fixedWidth />
                                 title="Bodega"
                                 value="#103"
                             />
+                            :
+                            null}
 
+                            {userData.estacionamiento?
                             <ProfileData
                                 icon=<FontAwesomeIcon icon={faParking} fixedWidth />
                                 title="Parking"
                                 value="#96 (DB-DX-79)"
                             />
+                            :
+                            null}
+
+                            <hr />
+
+                            {userData.residente?
+                            <ProfileData
+                                icon=<FontAwesomeIcon icon={faUser} fixedWidth />
+                                title="Residente"
+                                value={userData.residente}
+                                badge=<Badge className="profile-data-badge" pill variant="warning">Residente</Badge>
+                            />
+                            :
+                            null}
+
+                            {userData.telefono_residente?
+                            <ProfileData
+                                icon=<FontAwesomeIcon icon={faPhone} fixedWidth />
+                                title="Teléfono"
+                                value={userData.telefono_residente}
+                            />
+                            :
+                            null}
+
+                            {userData.correo_residente?
+                            <ProfileData
+                                icon=<FontAwesomeIcon icon={faEnvelope} fixedWidth />
+                                title="Correo"
+                                value={userData.correo_residente}
+                            />
+                            :
+                            null}
 
                             <br />
 
@@ -104,7 +160,10 @@ class Profile extends Component{
                     </Card>
 
                     <Card>
+                        {userData.level === 'user'?
                         <Card.Header>Mis tickets enviados</Card.Header>
+                        :
+                        <Card.Header>Tickets recibidos</Card.Header>}
 
                         <Card.Body>
                             <Accordion>

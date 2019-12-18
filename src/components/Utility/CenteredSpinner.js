@@ -6,7 +6,7 @@ class CenteredSpinner extends Component {
         return (
             <div style={ {'textAlign' : 'center' } }>
                 <Spinner animation="border" role="status">
-                    <span className="sr-only">Loading...</span>
+                    <span className="sr-only">Cargando...</span>
                 </Spinner>
             </div>
         );

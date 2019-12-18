@@ -8,7 +8,7 @@ export function GetUserToken(){
 
 // Verifies if token is valid in API
 export function VerifyToken(){
-    var FetchURL = `${APIURL()}/DatosUsuario/${GetUserToken()}`;
+    var FetchURL = `${APIURL()}/DatosUsuario/Decode/${GetUserToken()}/`;
 
     return fetch(FetchURL)
     .then(response => response.json())
@@ -22,7 +22,7 @@ export function VerifyToken(){
 
 // Decodes token in API and returns user permissions level
 export function GetUserPermissions(){
-    var FetchURL = `${APIURL()}/DatosUsuario/${GetUserToken()}`;
+    var FetchURL = `${APIURL()}/DatosUsuario/Decode/${GetUserToken()}/`;
 
     return fetch(FetchURL)
     .then(response => response.json())
@@ -36,12 +36,11 @@ export function GetUserPermissions(){
 
 // Decodes token in API and returns user data (id, rut, level)
 export function GetUserData(){
-    var FetchURL = `${APIURL()}/DatosUsuario/${GetUserToken()}`;
+    var FetchURL = `${APIURL()}/DatosUsuario/Decode/${GetUserToken()}/`;
 
     return fetch(FetchURL)
     .then(response => response.json())
     .then(resp => {
-        console.log(resp);
         return resp
     })
     .catch(err => {

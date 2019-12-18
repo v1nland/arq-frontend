@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Table, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Card, Form, Col, Button, Row, Table } from 'react-bootstrap';
 import { MDBDataTable } from 'mdbreact';
 
 // Utility components
@@ -7,23 +7,23 @@ import CenteredSpinner from '../components/Utility/CenteredSpinner';
 import PageTitle from '../components/Utility/PageTitle';
 import AlertsHandler from '../components/Utility/AlertsHandler';
 
-import { GetUserData } from '../functions/JWT';
-import { FetchDepartamentos, FetchDataTablesLang } from '../functions/Database';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FetchEspaciosComunes, FetchDataTablesLang } from '../functions/Database';
 
-class Neighbors extends Component{
+class CommonSpaces extends Component{
     constructor(props, context){
         super(props, context);
 
         this.state = {
-            dptos: [],
+            espaciosComunes: [],
             dtlang: []
         }
     }
 
     componentDidMount(){
-        FetchDepartamentos()
+        FetchEspaciosComunes()
         .then(res => {
-            this.setState({ dptos: res.rows })
+            this.setState({ espaciosComunes: res.rows })
         })
 
         FetchDataTablesLang()
@@ -33,73 +33,49 @@ class Neighbors extends Component{
     }
 
     render(){
-        const { dptos } = this.state;
+        const { espaciosComunes } = this.state;
         const { dtlang } = this.state;
 
         const data = {
             columns: [
                 {
                     label: '#',
-                    field: 'numero',
+                    field: 'id',
                     sort: 'asc',
                     width: 150
                 },
                 {
-                    label: 'Dueño',
-                    field: 'dueno',
+                    label: 'Nombre',
+                    field: 'nombre',
                     sort: 'asc',
-                    width: 270
+                    width: 150
                 },
                 {
-                    label: 'Residente',
-                    field: 'residente',
+                    label: 'Condominio (id_cond)',
+                    field: 'id_condominio',
                     sort: 'asc',
                     width: 200
                 },
                 {
-                    label: 'Telefono',
-                    field: 'telefono',
-                    sort: 'asc',
-                    width: 100
-                },
-                {
-                    label: 'Correo',
-                    field: 'correo',
+                    label: 'Estado',
+                    field: 'estado',
                     sort: 'asc',
                     width: 150
-                },
-                {
-                    label: 'Bodega',
-                    field: 'bodega',
-                    sort: 'asc',
-                    width: 100
-                },
-                {
-                    label: 'Estacionamiento',
-                    field: 'estacionamiento',
-                    sort: 'asc',
-                    width: 100
-                },
-                {
-                    label: 'Prorrateo (%)',
-                    field: 'prorrateo',
-                    sort: 'asc',
-                    width: 100
                 }
             ],
-            rows: dptos,
+            rows: espaciosComunes,
             language: dtlang
         };
 
         return(
             <div>
                 <AlertsHandler onRef={ref => (this.AlertsHandler = ref)} />
-                <PageTitle text="Datos de vecinos" />
+                <PageTitle text="Espacios Comunes" />
 
                 <Card>
                     <Card.Header>
                         <Row>
-                            <Col>Visualiza los datos de los vecinos</Col>
+                            <Col><span>Listado detallado de espacios comunes</span></Col>
                         </Row>
                     </Card.Header>
 
@@ -112,7 +88,7 @@ class Neighbors extends Component{
                     </Card.Body>
                 </Card>
             </div>
-        )
+        );
     }
 }
-export default Neighbors;
+export default CommonSpaces;

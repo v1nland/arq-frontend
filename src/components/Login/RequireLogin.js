@@ -20,6 +20,7 @@ class RequireLogin extends Component{
         this.HandleNeighborLoginForm = this.HandleNeighborLoginForm.bind(this);
 
         this.state = {
+            done: false,
             IsTokenValid: false
         }
     }
@@ -28,7 +29,7 @@ class RequireLogin extends Component{
         // Check if user is already logged in
         VerifyToken()
         .then(res => {
-            this.setState({ IsTokenValid: res })
+            this.setState({ IsTokenValid: res, done: true })
         })
     }
 
@@ -52,7 +53,6 @@ class RequireLogin extends Component{
         })
     }
 
-    // query not ready yet
     HandleNeighborLoginForm(event){
         event.preventDefault();
         const et = event.target;
@@ -60,8 +60,10 @@ class RequireLogin extends Component{
         FetchDptoLogin( et[0].value, et[1].value, et[2].value )
         .then( res => {
             if(res.count === 1){
+                // Give notification
                 this.AlertsHandler.generate('success', '¡Genial!', 'Iniciaste sesión exitosamente.');
-
+                // Save token generated from server
+                sessionStorage.setItem('token', res.rows[0].token);
                 // CreateAndStoreToken( { condCode: et[0].value, user: et[1].value, password: et[2].value, level: 'user' } )
                 this.setState({ IsTokenValid: true })
             }else{
@@ -77,14 +79,17 @@ class RequireLogin extends Component{
 
                 {
                     this.state.IsTokenValid === true ?
-                    this.props.appComponent
+                        this.props.appComponent
                     :
-                    <Overlay
-                        content=<LoginForm
-                            onSubmitUserForm={this.HandleUserLoginForm}
-                            onSubmitNeighborForm={this.HandleNeighborLoginForm}
-                        />
-                    />
+                        this.state.done === true ?
+                            <Overlay
+                                content=<LoginForm
+                                    onSubmitUserForm={this.HandleUserLoginForm}
+                                    onSubmitNeighborForm={this.HandleNeighborLoginForm}
+                                />
+                            />
+                        :
+                            <CenteredSpinner />
                 }
             </div>
         );

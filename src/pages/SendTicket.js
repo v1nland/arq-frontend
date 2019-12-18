@@ -6,6 +6,9 @@ import CenteredSpinner from '../components/Utility/CenteredSpinner';
 import PageTitle from '../components/Utility/PageTitle';
 import AlertsHandler from '../components/Utility/AlertsHandler';
 
+import { GetUserData } from '../functions/JWT';
+import { InsertNewTicket } from '../functions/Database';
+
 class SendTicket extends Component {
     constructor(props, context){
         super(props, context);
@@ -20,11 +23,20 @@ class SendTicket extends Component {
     HandleTicketForm(event) {
         event.preventDefault();
 
-        this.AlertsHandler.generate('success', 'Ticket Enviado', 'Se envió el ticket al equipo del comité.');
+        const et = event.target;
 
-        console.log(event.target.formGridEmail.value);
-        console.log(event.target.formGridDpto.value);
-        console.log(event.target.formGridMessage.value);
+        GetUserData()
+        .then( res => {
+            InsertNewTicket( res.id_cond, res.id, et.formGridSubject.value, et.formGridMessage.value )
+            .then( res => {
+                console.log( res );
+                if (res.count === 0) {
+                    this.AlertsHandler.generate('success', 'Ticket enviado', 'Se envió el ticket al equipo del comité.');
+                }else{
+                    this.AlertsHandler.generate('danger', 'Ticket no enviado', '¡Ocurrió un error! Intenta más tarde.');
+                }
+            })
+        })
     }
 
     render(){
@@ -39,21 +51,9 @@ class SendTicket extends Component {
                     <Card.Body>
                         <Form onSubmit={this.HandleTicketForm} id="ticketForm">
                             <Form.Row>
-                                <Form.Group as={Col} controlId="formGridEmail">
-                                    <Form.Label>E-mail</Form.Label>
-                                    <Form.Control type="email" placeholder="Ingresa tu correo" />
-                                </Form.Group>
-
-                                <Form.Group as={Col} controlId="formGridDpto">
-                                    <Form.Label>Número dpto.</Form.Label>
-                                    <Form.Control type="number" min="1000" max="2600" placeholder="2005" />
-                                </Form.Group>
-                            </Form.Row>
-
-                            <Form.Row>
-                                <Form.Group as={Col} controlId="formGridDate">
-                                    <Form.Label>Fecha</Form.Label>
-                                    <Form.Control type="date" placeholder="dd/MM/yy" />
+                                <Form.Group as={Col} controlId="formGridSubject">
+                                    <Form.Label>Asunto</Form.Label>
+                                    <Form.Control type="text" placeholder="(e.g.: Consulta sobre agua)" />
                                 </Form.Group>
                             </Form.Row>
 

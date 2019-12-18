@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Table, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Card, Form, Col, Button, Row, Table } from 'react-bootstrap';
 import { MDBDataTable } from 'mdbreact';
 
 // Utility components
@@ -7,24 +7,22 @@ import CenteredSpinner from '../components/Utility/CenteredSpinner';
 import PageTitle from '../components/Utility/PageTitle';
 import AlertsHandler from '../components/Utility/AlertsHandler';
 
-import { GetUserData } from '../functions/JWT';
-import { FetchDepartamentos, FetchDataTablesLang } from '../functions/Database';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FetchMultas, FetchDataTablesLang } from '../functions/Database';
+import { NumberWithDots, FormatDate } from '../functions/Helper';
 
-class Neighbors extends Component{
+class Penalties extends Component{
     constructor(props, context){
         super(props, context);
 
         this.state = {
-            dptos: [],
+            multas: [],
             dtlang: []
         }
     }
 
     componentDidMount(){
-        FetchDepartamentos()
-        .then(res => {
-            this.setState({ dptos: res.rows })
-        })
+        this.RefreshMultas()
 
         FetchDataTablesLang()
         .then(res => {
@@ -32,74 +30,76 @@ class Neighbors extends Component{
         })
     }
 
+    RefreshMultas(){
+        FetchMultas()
+        .then(res => {
+            this.setState({ multas: res.rows }, () => {
+                for (var i = 0; i < this.state.multas.length; i++) {
+                    this.state.multas[i]['monto'] = NumberWithDots( this.state.multas[i]['monto'] )
+                    this.state.multas[i]['fecha'] = FormatDate( this.state.multas[i]['fecha'] )
+                }
+            })
+            console.log( this.state.multas );
+        })
+    }
+
     render(){
-        const { dptos } = this.state;
+        const { mes } = this.state;
+        const { multas } = this.state;
         const { dtlang } = this.state;
 
         const data = {
             columns: [
                 {
                     label: '#',
-                    field: 'numero',
+                    field: 'id',
                     sort: 'asc',
                     width: 150
                 },
                 {
-                    label: 'Dueño',
-                    field: 'dueno',
+                    label: 'Fecha',
+                    field: 'fecha',
+                    sort: 'asc',
+                    width: 150
+                },
+                {
+                    label: 'Grado',
+                    field: 'grado',
                     sort: 'asc',
                     width: 270
                 },
                 {
-                    label: 'Residente',
-                    field: 'residente',
+                    label: 'Dueño (id_dpto)',
+                    field: 'id_departamentos',
                     sort: 'asc',
                     width: 200
                 },
                 {
-                    label: 'Telefono',
-                    field: 'telefono',
+                    label: 'Causa',
+                    field: 'causa',
                     sort: 'asc',
                     width: 100
                 },
                 {
-                    label: 'Correo',
-                    field: 'correo',
+                    label: 'Monto',
+                    field: 'monto',
                     sort: 'asc',
                     width: 150
-                },
-                {
-                    label: 'Bodega',
-                    field: 'bodega',
-                    sort: 'asc',
-                    width: 100
-                },
-                {
-                    label: 'Estacionamiento',
-                    field: 'estacionamiento',
-                    sort: 'asc',
-                    width: 100
-                },
-                {
-                    label: 'Prorrateo (%)',
-                    field: 'prorrateo',
-                    sort: 'asc',
-                    width: 100
                 }
             ],
-            rows: dptos,
+            rows: multas,
             language: dtlang
         };
 
         return(
             <div>
                 <AlertsHandler onRef={ref => (this.AlertsHandler = ref)} />
-                <PageTitle text="Datos de vecinos" />
+                <PageTitle text="Multas cursadas" />
 
                 <Card>
                     <Card.Header>
                         <Row>
-                            <Col>Visualiza los datos de los vecinos</Col>
+                            <Col><span>Historial de multas cursadas</span></Col>
                         </Row>
                     </Card.Header>
 
@@ -112,7 +112,7 @@ class Neighbors extends Component{
                     </Card.Body>
                 </Card>
             </div>
-        )
+        );
     }
 }
-export default Neighbors;
+export default Penalties;

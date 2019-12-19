@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { GetUserPermissions } from '../../functions/JWT'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGlobe, faBars, faBuilding, faTachometerAlt, faUser, faUsers, faTicketAlt, faCommentDots, faCommentDollar, faCreditCard, faBalanceScale, faSwimmingPool, faShower } from '@fortawesome/free-solid-svg-icons';
+import { faGlobe, faBars, faBuilding, faTachometerAlt, faUser, faUsers, faDatabase, faTicketAlt, faCommentDots, faCommentDollar, faCreditCard, faBalanceScale, faSwimmingPool, faShower } from '@fortawesome/free-solid-svg-icons';
 
 class Navigation extends Component{
     constructor(props, context){
@@ -34,21 +34,7 @@ class Navigation extends Component{
 
                 <div className="menu-list">
                     <ul id="menu-content" className="menu-content collapse out">
-
-                        {/* Collapsable example */}
-                        <li data-toggle="collapse" data-target="#tickets" class="collapsed">
-                            <div className="button-wrapper">
-                                <a href="#"><FontAwesomeIcon icon={faGlobe} fixedWidth /> Auswertungen <span class="arrow"></span></a>
-                            </div>
-                        </li>
-                        <ul class="sub-menu collapse" id="tickets">
-                            <li>Trendmonitoring</li>
-                            <li>Alarmmonitoring</li>
-                            <li>Audit-Trail</li>
-                        </ul>
-
-                        {
-                            usrLevel === 'admin'  ?
+                        {usrLevel === 'admin'  ?
                             <li>
                                 <Link to="/">
                                     <div className="button-wrapper">
@@ -57,8 +43,7 @@ class Navigation extends Component{
                                 </Link>
                             </li>
                             :
-                            null
-                        }
+                            null}
 
                         <li>
                             <Link to="/Profile">
@@ -68,21 +53,38 @@ class Navigation extends Component{
                             </Link>
                         </li>
 
-                        {
-                            usrLevel === 'admin'  ?
-                            <li>
-                                <Link to="/Neighbors">
+                        {usrLevel === 'admin'  ?
+                            <div>
+                                <li data-toggle="collapse" data-target="#vecinos" className="collapsed">
                                     <div className="button-wrapper">
-                                        <FontAwesomeIcon icon={faUsers} fixedWidth /> Datos vecinos
+                                        <FontAwesomeIcon icon={faUsers} fixedWidth /> Vecinos <span className="arrow"></span>
                                     </div>
-                                </Link>
-                            </li>
-                            :
-                            null
-                        }
+                                </li>
 
-                        {
-                            usrLevel === 'user' ?
+                                <ul className="sub-menu collapse" id="vecinos">
+                                    <li>
+                                        <Link to="/Neighbors">
+                                                <FontAwesomeIcon icon={faDatabase} fixedWidth /> Datos vecinos
+                                        </Link>
+                                    </li>
+
+                                    <li>
+                                        <Link to="/ViewTickets">
+                                            <FontAwesomeIcon icon={faTicketAlt} fixedWidth /> Ver tickets
+                                        </Link>
+                                    </li>
+
+                                    <li>
+                                        <Link to="/Penalties">
+                                            <FontAwesomeIcon icon={faCommentDollar} fixedWidth /> Multas
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                            :
+                            null}
+
+                        {usrLevel === 'user' ?
                             <li>
                                 <Link to="/SendTicket">
                                     <div className="button-wrapper">
@@ -91,11 +93,9 @@ class Navigation extends Component{
                                 </Link>
                             </li>
                             :
-                            null
-                        }
+                            null}
 
-                        {
-                            usrLevel === 'user'  ?
+                        {usrLevel === 'user'  ?
                             <li>
                                 <Link to="/ViewUserTickets">
                                     <div className="button-wrapper">
@@ -104,34 +104,7 @@ class Navigation extends Component{
                                 </Link>
                             </li>
                             :
-                            null
-                        }
-
-                        {
-                            usrLevel === 'admin'  ?
-                            <li>
-                                <Link to="/ViewTickets">
-                                    <div className="button-wrapper">
-                                        <FontAwesomeIcon icon={faTicketAlt} fixedWidth /> Ver tickets
-                                    </div>
-                                </Link>
-                            </li>
-                            :
-                            null
-                        }
-
-                        {
-                            usrLevel === 'admin'  ?
-                            <li>
-                                <Link to="/Penalties">
-                                    <div className="button-wrapper">
-                                        <FontAwesomeIcon icon={faCommentDollar} fixedWidth /> Multas
-                                    </div>
-                                </Link>
-                            </li>
-                            :
-                            null
-                        }
+                            null}
 
                         {
                             // usrLevel === 'admin'  ?
@@ -146,8 +119,7 @@ class Navigation extends Component{
                             // null
                         }
 
-                        {
-                            usrLevel === 'admin'  ?
+                        {usrLevel === 'admin'  ?
                             <li>
                                 <Link to="/CommonExpensesPayments">
                                     <div className="button-wrapper">
@@ -156,11 +128,9 @@ class Navigation extends Component{
                                 </Link>
                             </li>
                             :
-                            null
-                        }
+                            null}
 
-                        {
-                            usrLevel === 'admin'  ?
+                        {usrLevel === 'admin'  ?
                             <li>
                                 <Link to="/CommonExpensesBalance">
                                     <div className="button-wrapper">
@@ -169,11 +139,9 @@ class Navigation extends Component{
                                 </Link>
                             </li>
                             :
-                            null
-                        }
+                            null}
 
-                        {
-                            usrLevel === 'admin' || usrLevel === 'user' ?
+                        {usrLevel === 'admin' || usrLevel === 'user' ?
                             <li>
                                 <Link to="/CommonSpaces">
                                     <div className="button-wrapper">
@@ -182,11 +150,9 @@ class Navigation extends Component{
                                 </Link>
                             </li>
                             :
-                            null
-                        }
+                            null}
 
-                        {
-                            usrLevel === 'admin'  ?
+                        {usrLevel === 'admin'  ?
                             <li>
                                 <Link to="/WaterMeasure">
                                     <div className="button-wrapper">
@@ -195,8 +161,7 @@ class Navigation extends Component{
                                 </Link>
                             </li>
                             :
-                            null
-                        }
+                            null}
                     </ul>
                 </div>
             </div>

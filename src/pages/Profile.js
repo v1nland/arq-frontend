@@ -64,8 +64,17 @@ class Profile extends Component{
                                 icon=<FontAwesomeIcon icon={faIdCard} fixedWidth />
                                 title="RUT"
                                 value={ userData.rut }
-                                badge=<Badge className="profile-data-badge" pill variant="success">Comité/Administración</Badge>
                             />:
+                            null}
+
+                            {userData.nombre?
+                            <ProfileData
+                                icon=<FontAwesomeIcon icon={faUser} fixedWidth />
+                                title="Nombre"
+                                value={userData.nombre}
+                                badge=<Badge className="profile-data-badge" pill variant="success">Comité/Administración</Badge>
+                            />
+                            :
                             null}
 
                             {userData.dueno?

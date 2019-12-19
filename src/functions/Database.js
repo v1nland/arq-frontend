@@ -152,6 +152,17 @@ export function FetchEspaciosComunes(){
     })
 }
 
+export function InsertEspacioComun( nombre, estado ){
+    return fetch(`${APIURL()}/EspaciosComunes/Insertar/${nombre}/${estado}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
 export function AnswerTicket( id, msg ){
     return fetch(`${APIURL()}/Tickets/Responder/${id}/${msg}/`)
     .then(response => response.json())

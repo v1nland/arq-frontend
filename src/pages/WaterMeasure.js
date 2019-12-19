@@ -117,7 +117,8 @@ class WaterMeasure extends Component{
                 <Card>
                     <Card.Header>
                         <Row>
-                            <Col><span>Historial de mediciones</span> {<Button onClick={this.HandleShow}>Insertar nueva medición</Button>}</Col>
+                            <Col sm={9}><span>Historial de mediciones</span></Col>
+                            <Col sm={3}><Button onClick={this.HandleShow}>Insertar nueva medición</Button></Col>
                         </Row>
                     </Card.Header>
 

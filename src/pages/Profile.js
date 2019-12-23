@@ -9,7 +9,7 @@ import SupportTicket from '../components/Utility/SupportTicket';
 import ProfileData from '../components/Utility/ProfileData';
 
 import { Logout } from '../functions/Session'
-import { FetchUserData } from '../functions/Database';
+import { FetchUserData, FetchDepartamentosByID } from '../functions/Database';
 import { FormatRUT } from '../functions/RUT'
 import { GetUserData } from '../functions/JWT';
 
@@ -30,8 +30,15 @@ class Profile extends Component{
     componentDidMount(){
         GetUserData()
         .then( res => {
-            this.setState({ userData: res })
-            console.log( res );
+            if (res.level === 'user') {
+                FetchDepartamentosByID( res.id )
+                .then(r => {
+                    this.setState({ userData: r.rows[0] })
+                    console.log( r.rows[0] );
+                })
+            }else{
+                this.setState({ userData: res })
+            }
         })
     }
 
@@ -61,6 +68,7 @@ class Profile extends Component{
 
                             {userData.rut?
                             <ProfileData
+                                id_dpto={userData.id}
                                 icon=<FontAwesomeIcon icon={faIdCard} fixedWidth />
                                 title="RUT"
                                 value={ userData.rut }
@@ -69,6 +77,7 @@ class Profile extends Component{
 
                             {userData.nombre?
                             <ProfileData
+                                id_dpto={userData.id}
                                 icon=<FontAwesomeIcon icon={faUser} fixedWidth />
                                 title="Nombre"
                                 value={userData.nombre}
@@ -79,6 +88,7 @@ class Profile extends Component{
 
                             {userData.dueno?
                             <ProfileData
+                                id_dpto={userData.id}
                                 icon=<FontAwesomeIcon icon={faUser} fixedWidth />
                                 title="Nombre"
                                 value={userData.dueno}
@@ -89,6 +99,7 @@ class Profile extends Component{
 
                             {userData.numero?
                             <ProfileData
+                                id_dpto={userData.id}
                                 icon=<FontAwesomeIcon icon={faHome} fixedWidth />
                                 title="Dpto."
                                 value={userData.numero}
@@ -98,6 +109,7 @@ class Profile extends Component{
 
                             {userData.telefono?
                             <ProfileData
+                                id_dpto={userData.id}
                                 icon=<FontAwesomeIcon icon={faPhone} fixedWidth />
                                 title="Teléfono"
                                 value={userData.telefono}
@@ -107,6 +119,7 @@ class Profile extends Component{
 
                             {userData.correo?
                             <ProfileData
+                                id_dpto={userData.id}
                                 icon=<FontAwesomeIcon icon={faEnvelope} fixedWidth />
                                 title="Correo"
                                 value={userData.correo}
@@ -114,20 +127,22 @@ class Profile extends Component{
                             :
                             null}
 
-                            {userData.bodega?
+                            {userData.n_bodega != -1 && userData.n_bodega?
                             <ProfileData
+                                id_dpto={userData.id}
                                 icon=<FontAwesomeIcon icon={faDoorClosed} fixedWidth />
                                 title="Bodega"
-                                value="#103"
+                                value={`#${userData.n_bodega}`}
                             />
                             :
                             null}
 
-                            {userData.estacionamiento?
+                            {userData.n_estacionamiento != -1 && userData.n_estacionamiento?
                             <ProfileData
+                                id_dpto={userData.id}
                                 icon=<FontAwesomeIcon icon={faParking} fixedWidth />
                                 title="Parking"
-                                value="#96 (DB-DX-79)"
+                                value={`#${userData.n_estacionamiento}`}
                             />
                             :
                             null}
@@ -136,6 +151,7 @@ class Profile extends Component{
 
                             {userData.residente?
                             <ProfileData
+                                id_dpto={userData.id}
                                 icon=<FontAwesomeIcon icon={faUser} fixedWidth />
                                 title="Residente"
                                 value={userData.residente}
@@ -146,6 +162,7 @@ class Profile extends Component{
 
                             {userData.telefono_residente?
                             <ProfileData
+                                id_dpto={userData.id}
                                 icon=<FontAwesomeIcon icon={faPhone} fixedWidth />
                                 title="Teléfono"
                                 value={userData.telefono_residente}
@@ -155,6 +172,7 @@ class Profile extends Component{
 
                             {userData.correo_residente?
                             <ProfileData
+                                id_dpto={userData.id}
                                 icon=<FontAwesomeIcon icon={faEnvelope} fixedWidth />
                                 title="Correo"
                                 value={userData.correo_residente}

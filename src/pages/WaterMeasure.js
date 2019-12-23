@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Modal, Card, Form, Col, Button, Row, Table } from 'react-bootstrap';
+import { Modal, Card, Form, Col, Button, ButtonGroup, Row, Table } from 'react-bootstrap';
 import { MDBDataTable } from 'mdbreact';
+import CSVReader from 'react-csv-reader';
 
 // Utility components
 import CenteredSpinner from '../components/Utility/CenteredSpinner';
@@ -8,21 +9,31 @@ import PageTitle from '../components/Utility/PageTitle';
 import AlertsHandler from '../components/Utility/AlertsHandler';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FetchMedicionesAgua, FetchDataTablesLang, InsertMedicionAgua } from '../functions/Database';
-import { NumberWithDots } from '../functions/Helper';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FetchMedicionesAgua, FetchMedicionesAguaByID, FetchDataTablesLang, InsertMedicionAgua, UpdateMedicionAgua, DeleteMedicionAgua } from '../functions/Database';
+import { NumberWithDots, FormatDateTime } from '../functions/Helper';
 
 class WaterMeasure extends Component{
     constructor(props, context){
         super(props, context);
 
+        // First modal bindings
         this.HandleShow = this.HandleShow.bind(this);
         this.HandleClose = this.HandleClose.bind(this);
         this.HandleInsertMedicionAgua = this.HandleInsertMedicionAgua.bind(this);
 
+        this.HandleCSV = this.HandleCSV.bind(this);
+        this.HandleShowCSV = this.HandleShowCSV.bind(this);
+        this.HandleCloseCSV = this.HandleCloseCSV.bind(this);
+        this.HandleInsertMedicionAguaCSV = this.HandleInsertMedicionAguaCSV.bind(this);
+
         this.state = {
             mediciones: [],
             dtlang: [],
-            showModal: false
+            showModal: false,
+            showCSVModal: false,
+            csvToInsert: [],
+            file: "Subir archivo CSV"
         }
     }
 
@@ -40,10 +51,29 @@ class WaterMeasure extends Component{
         .then(res => {
             this.setState({ mediciones: res.rows }, () => {
                 for (var i = 0; i < this.state.mediciones.length; i++) {
+                    var cur_id = this.state.mediciones[i]['id']
+
                     this.state.mediciones[i]['litros'] = NumberWithDots( this.state.mediciones[i]['litros'] )
+                    this.state.mediciones[i]['fecha'] = FormatDateTime( this.state.mediciones[i]['fecha'] )
+                    this.state.mediciones[i]['acciones'] = <Button size="sm" variant="danger" id={cur_id} onClick={this.HandleDeleteMedicion}><FontAwesomeIcon icon={faTrash} /></Button>
                 }
             })
             console.log( this.state.mediciones );
+        })
+    }
+
+    HandleDeleteMedicion( e ){
+        var idDelete = e.currentTarget.id;
+
+        DeleteMedicionAgua( idDelete )
+        .then(res => {
+            if (res.count === 0) {
+                this.AlertsHandler.generate('success', 'Medición eliminada', 'Se eliminó la medición.');
+                this.RefreshMedicionesAgua()
+                this.HandleCloseEdit()
+            }else{
+                this.AlertsHandler.generate('danger', 'Medición no eliminada', '¡Ocurrió un error! Intenta más tarde.');
+            }
         })
     }
 
@@ -55,6 +85,14 @@ class WaterMeasure extends Component{
         this.setState({ showModal: true });
     }
 
+    HandleCloseCSV() {
+        this.setState({ showCSVModal: false });
+    }
+
+    HandleShowCSV() {
+        this.setState({ showCSVModal: true });
+    }
+
     HandleInsertMedicionAgua(event) {
         event.preventDefault();
 
@@ -64,19 +102,50 @@ class WaterMeasure extends Component{
         .then( res => {
             console.log( res );
             if (res.count === 0) {
-                this.AlertsHandler.generate('success', 'Ticket respondido', 'Se envió la respuesta al residente.');
+                this.AlertsHandler.generate('success', 'Medición insertada', 'Se registró la medición.');
                 this.RefreshMedicionesAgua()
                 this.HandleClose()
             }else{
-                this.AlertsHandler.generate('danger', 'Ticket no respondido', '¡Ocurrió un error! Intenta más tarde.');
+                this.AlertsHandler.generate('danger', 'Medición no insertada', '¡Ocurrió un error! Intenta más tarde.');
             }
         });
+    }
+
+    HandleInsertMedicionAguaCSV(event) {
+        event.preventDefault();
+
+        const et = event.target;
+        const csvToInsert = this.state.csvToInsert;
+
+        for (var i = 0; i < csvToInsert.length; i++) {
+            const cur_val = csvToInsert[i];
+
+            InsertMedicionAgua( cur_val[0], cur_val[1], cur_val[2] )
+            .then( res => {
+                if (res.count === 0) {
+                    this.AlertsHandler.generate('success', 'Medición insertada', 'Se registró la medición.');
+                }else{
+                    this.AlertsHandler.generate('danger', 'Medición no insertada', '¡Ocurrió un error! Intenta más tarde.');
+                }
+            })
+            .then(r => {
+                this.RefreshMedicionesAgua()
+                this.HandleCloseCSV()
+            })
+        }
+    }
+
+    HandleCSV( data ){
+        this.setState({ csvToInsert: data })
+        this.setState({ file: "Archivo subido exitosamente" })
     }
 
     render(){
         const { mediciones } = this.state;
         const { dtlang } = this.state;
         const { showModal } = this.state;
+        const { showCSVModal } = this.state;
+        const { file } = this.state;
 
         const data = {
             columns: [
@@ -93,8 +162,8 @@ class WaterMeasure extends Component{
                     width: 150
                 },
                 {
-                    label: 'Dueño (id_dpto)',
-                    field: 'id_departamentos',
+                    label: 'Dpto.',
+                    field: 'num_dpto',
                     sort: 'asc',
                     width: 200
                 },
@@ -103,6 +172,12 @@ class WaterMeasure extends Component{
                     field: 'litros',
                     sort: 'asc',
                     width: 150
+                },
+                {
+                    label: '',
+                    field: 'acciones',
+                    sort: 'asc',
+                    width: 50
                 }
             ],
             rows: mediciones,
@@ -116,10 +191,11 @@ class WaterMeasure extends Component{
 
                 <Card>
                     <Card.Header>
-                        <Row>
-                            <Col sm={9}><span>Historial de mediciones</span></Col>
-                            <Col sm={3}><Button onClick={this.HandleShow}>Insertar nueva medición</Button></Col>
-                        </Row>
+                        <span>Historial de mediciones</span>
+                        <ButtonGroup className="float-right">
+                            <Button variant="success" onClick={this.HandleShowCSV}><FontAwesomeIcon icon={faPlus} /> CSV</Button>
+                            <Button onClick={this.HandleShow}><FontAwesomeIcon icon={faPlus} /> Agregar</Button>
+                        </ButtonGroup>
                     </Card.Header>
 
                     <Card.Body>
@@ -133,7 +209,7 @@ class WaterMeasure extends Component{
 
                 <Modal show={showModal} onHide={this.HandleClose} animation={true}>
                     <Modal.Header>
-                        <Modal.Title>Responder Ticket {this.props.id}</Modal.Title>
+                        <Modal.Title>Insertar nueva medición</Modal.Title>
                     </Modal.Header>
 
                     <Modal.Body>
@@ -162,6 +238,30 @@ class WaterMeasure extends Component{
                     <Modal.Footer>
                         <Button form="waterForm" className="btn btn-primary" type="submit">Agregar medición</Button>
                         <Button className="btn btn-secondary" onClick={this.HandleClose}>Cerrar</Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={showCSVModal} onHide={this.HandleCloseCSV} animation={true}>
+                    <Modal.Header>
+                        <Modal.Title>Insertar nuevas mediciones</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <Form onSubmit={this.HandleInsertMedicionAguaCSV} id="waterCSVForm">
+                            <Form.Group as={Col} style={{textAlign: 'center'}}>
+                                <Form.Label className="file-input" htmlFor="csv-button">{ file }</Form.Label>
+                                <CSVReader
+                                    onFileLoaded={this.HandleCSV}
+                                    inputId="csv-button"
+                                    inputStyle={{display: 'none'}}
+                                />
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button form="waterCSVForm" className="btn btn-primary" type="submit">Agregar mediciones</Button>
+                        <Button className="btn btn-secondary" onClick={this.HandleCloseCSV}>Cerrar</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

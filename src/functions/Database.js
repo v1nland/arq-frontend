@@ -1,7 +1,7 @@
 export function APIURL(){
-    // return 'https://arq-backend.herokuapp.com'
+    return 'https://arq-backend.herokuapp.com'
     // return 'http://192.168.0.17:8080'
-    return 'http://localhost:8080'
+    // return 'http://localhost:8080'
 }
 
 export function FetchDataTablesLang(){
@@ -15,6 +15,9 @@ export function FetchDataTablesLang(){
     })
 }
 
+/////////////////// BEGIN /////////////////////////
+/////////////////// CONDOMINIOS ///////////////////
+/////////////////// CONDOMINIOS ///////////////////
 export function FetchCondominios( id ) {
     var FetchURL = `${APIURL()}/Condominios/byID/${id}/`;
     console.log( FetchURL );
@@ -29,6 +32,9 @@ export function FetchCondominios( id ) {
     })
 }
 
+/////////////////// BEGIN ////////////////////////////
+/////////////////// USUARIOS ADMIN ///////////////////
+/////////////////// USUARIOS ADMIN ///////////////////
 export function FetchUserLogin( rut, pass ){
     var FetchURL = `${APIURL()}/Usuarios/Login/${rut}/${pass}/`;
 
@@ -42,6 +48,9 @@ export function FetchUserLogin( rut, pass ){
     })
 }
 
+/////////////////// BEGIN //////////////////////////////
+/////////////////// DEPARTAMENTOS ///////////////////
+/////////////////// DEPARTAMENTOS ///////////////////
 export function FetchDptoLogin( cod, num, pass ){
     return fetch(`${APIURL()}/Departamentos/Login/${cod}/${num}/${pass}/`)
     .then(response => response.json())
@@ -64,6 +73,31 @@ export function FetchDepartamentos(){
     })
 }
 
+export function FetchDepartamentosByID(id){
+    return fetch(`${APIURL()}/Departamentos/AllData/byID/${id}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function UpdateDepartamentos(id){
+    return fetch(`${APIURL()}/Departamentos/${id}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+/////////////////// BEGIN /////////////////////
+/////////////////// TICKETS ///////////////////
+/////////////////// TICKETS ///////////////////
 export function FetchTickets(){
     return fetch(`${APIURL()}/Tickets/`)
     .then(response => response.json())
@@ -97,6 +131,20 @@ export function InsertNewTicket( id_cond, id_dpto, subject, msg ){
     })
 }
 
+export function AnswerTicket( id, msg ){
+    return fetch(`${APIURL()}/Tickets/Responder/${id}/${msg}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+/////////////////// BEGIN /////////////////////////////
+/////////////////// MEDICIONES AGUA ///////////////////
+/////////////////// MEDICIONES AGUA ///////////////////
 export function FetchMedicionesAgua(){
     return fetch(`${APIURL()}/MedicionesAgua/`)
     .then(response => response.json())
@@ -108,7 +156,19 @@ export function FetchMedicionesAgua(){
     })
 }
 
+export function FetchMedicionesAguaByID(id){
+    return fetch(`${APIURL()}/MedicionesAgua/byID/${id}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
 export function InsertMedicionAgua( cod_cond, num_dpto, litros ){
+    console.log( `${APIURL()}/MedicionesAgua/Insertar/${litros}/${num_dpto}/${cod_cond}/` );
     return fetch(`${APIURL()}/MedicionesAgua/Insertar/${litros}/${num_dpto}/${cod_cond}/`)
     .then(response => response.json())
     .then(resp => {
@@ -119,6 +179,31 @@ export function InsertMedicionAgua( cod_cond, num_dpto, litros ){
     })
 }
 
+export function UpdateMedicionAgua( fecha, litros, id_dpto ){
+    return fetch(`${APIURL()}/MedicionesAgua/Update/${fecha}/${litros}/${id_dpto}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function DeleteMedicionAgua( id ){
+    return fetch(`${APIURL()}/MedicionesAgua/Delete/${id}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+/////////////////// BEGIN //////////////////////////////
+/////////////////// MULTAS /////////////////////////////
+/////////////////// MULTAS /////////////////////////////
 export function FetchMultas(){
     return fetch(`${APIURL()}/Multas/`)
     .then(response => response.json())
@@ -130,6 +215,44 @@ export function FetchMultas(){
     })
 }
 
+export function FetchMultasByID(id){
+    return fetch(`${APIURL()}/Multas/byID/${id}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function InsertMulta( cod_cond, num_dpto, monto, causa ){
+    console.log(`${APIURL()}/Multas/Insertar/${cod_cond}/${num_dpto}/${monto}/${causa}/`);
+    return fetch(`${APIURL()}/Multas/Insertar/${cod_cond}/${num_dpto}/${monto}/${causa}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function UpdateMulta( fecha, grado, monto, causa, id_dpto, id_mul ){
+    console.log(`${APIURL()}/Multas/UpdateMultas/${grado}/${id_dpto}/${monto}/${fecha}/${causa}/${id_mul}/`);
+    return fetch(`${APIURL()}/Multas/UpdateMultas/${grado}/${id_dpto}/${monto}/${fecha}/${causa}/${id_mul}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+/////////////////// BEGIN /////////////////////////////////
+/////////////////// PAGOS GASTOSCOMUNES ///////////////////
+/////////////////// PAGOS GASTOSCOMUNES ///////////////////
 export function FetchPagosGC(){
     return fetch(`${APIURL()}/PagosGC/`)
     .then(response => response.json())
@@ -141,6 +264,43 @@ export function FetchPagosGC(){
     })
 }
 
+export function FetchPagosGCByID(id){
+    return fetch(`${APIURL()}/PagosGC/byID/${id}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function InsertPagosGC( cod_cond, num_dpto, monto ){
+    return fetch(`${APIURL()}/PagosGC/Insertar/${monto}/${num_dpto}/${cod_cond}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function UpdatePagosGC( fecha, monto, id_dpto, id_pago ){
+    console.log(`${APIURL()}/PagosGC/Update/${monto}/${fecha}/${id_dpto}/${id_pago}/`);
+    return fetch(`${APIURL()}/PagosGC/Update/${monto}/${fecha}/${id_dpto}/${id_pago}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+/////////////////// BEGIN //////////////////////////////
+/////////////////// ESPACIOS COMUNES ///////////////////
+/////////////////// ESPACIOS COMUNES ///////////////////
 export function FetchEspaciosComunes(){
     return fetch(`${APIURL()}/EspaciosComunes/`)
     .then(response => response.json())
@@ -152,8 +312,20 @@ export function FetchEspaciosComunes(){
     })
 }
 
-export function InsertEspacioComun( nombre, estado ){
-    return fetch(`${APIURL()}/EspaciosComunes/Insertar/${nombre}/${estado}/`)
+export function FetchEspaciosComunesByID(id){
+    return fetch(`${APIURL()}/EspaciosComunes/byID/${id}/`)
+    .then(response => response.json())
+    .then(resp => {
+        console.log(resp);
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function InsertEspacioComun( nombre, cod_cond, estado, descripcion ){
+    return fetch(`${APIURL()}/EspaciosComunes/Insertar/${nombre}/${cod_cond}/${estado}/${descripcion}/`)
     .then(response => response.json())
     .then(resp => {
         return resp
@@ -163,8 +335,9 @@ export function InsertEspacioComun( nombre, estado ){
     })
 }
 
-export function AnswerTicket( id, msg ){
-    return fetch(`${APIURL()}/Tickets/Responder/${id}/${msg}/`)
+export function UpdateEspacioComun( nombre, estado, id_cond, descripcion ){
+    console.log( `${APIURL()}/EspaciosComunes/Update/${nombre}/${estado}/${descripcion}/${id_cond}/` );
+    return fetch(`${APIURL()}/EspaciosComunes/Update/${nombre}/${estado}/${descripcion}/${id_cond}/`)
     .then(response => response.json())
     .then(resp => {
         return resp

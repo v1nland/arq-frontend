@@ -38,6 +38,7 @@ class ViewTickets extends Component{
             title={`[Dpto. ${id}] ${asunto} - ${fecha}`}
             body={`CONSULTA: ${consulta}`}
             finalizado={finalizado}
+            response={`RESPUESTA: ${respuesta}`}
             refresh={this.RefreshTickets}
         />
     )

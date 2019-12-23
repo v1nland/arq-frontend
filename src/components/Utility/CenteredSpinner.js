@@ -4,7 +4,7 @@ import { Spinner } from 'react-bootstrap';
 class CenteredSpinner extends Component {
     render() {
         return (
-            <div style={ {'textAlign' : 'center' } }>
+            <div className="spinner-centered">
                 <Spinner animation="border" role="status">
                     <span className="sr-only">Cargando...</span>
                 </Spinner>

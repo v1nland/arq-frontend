@@ -383,6 +383,19 @@ code {
     width: fit-content;
     text-align: center;
 }
+/* .csv-input {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background-color: #106BA0;
+    display: inline-block;
+    transition: all .5s;
+    cursor: pointer;
+    padding: 15px 40px !important;
+    text-transform: uppercase;
+    width: fit-content;
+    text-align: center;
+} */
 
 /* Modal stuff */
 .modal-backdrop.fade {
@@ -688,6 +701,13 @@ tbody + thead{
 thead{
     cursor: pointer;
 }
+table{
+    text-align: center;
+}
 .col-sm-12[data-test=datatable-search]{
-    /* search button datatables */
+    /* DataTable search button */
+}
+.spinner-centered{
+    text-align: center;
+    vertical-align: middle;
 }

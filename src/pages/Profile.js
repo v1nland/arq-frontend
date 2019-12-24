@@ -9,8 +9,9 @@ import SupportTicket from '../components/Utility/SupportTicket';
 import ProfileData from '../components/Utility/ProfileData';
 
 import { Logout } from '../functions/Session'
-import { FetchUserData, FetchDepartamentosByID } from '../functions/Database';
+import { FetchUserData, FetchDepartamentosByID, FetchTickets, FetchTicketsDpto } from '../functions/Database';
 import { FormatRUT } from '../functions/RUT'
+import { FormatDateTime } from '../functions/Helper'
 import { GetUserData } from '../functions/JWT';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,12 +23,19 @@ class Profile extends Component{
     constructor(props, context){
         super(props, context);
 
+        this.RefreshTickets = this.RefreshTickets.bind(this)
+
         this.state = {
-            userData: []
+            userData: [],
+            tickets: [],
         }
     }
 
     componentDidMount(){
+        this.RefreshTickets()
+    }
+
+    RefreshTickets(){
         GetUserData()
         .then( res => {
             if (res.level === 'user') {
@@ -36,8 +44,18 @@ class Profile extends Component{
                     this.setState({ userData: r.rows[0] })
                     console.log( r.rows[0] );
                 })
+
+                FetchTickets()
+                .then(res => {
+                    this.setState({ tickets: res.rows })
+                })
             }else{
                 this.setState({ userData: res })
+
+                FetchTicketsDpto( res['id'] )
+                .then(res => {
+                    this.setState({ tickets: res.rows })
+                })
             }
         })
     }
@@ -48,8 +66,33 @@ class Profile extends Component{
         window.location.reload()
     }
 
+    renderTicket = ({id, id_departamentos, id_usuarios, asunto, consulta, respuesta, finalizado, fecha}) => (
+        <SupportTicket key={id}
+            id={id}
+            color={finalizado==0 ? "danger" : "success"}
+            title={`#${id} - ${FormatDateTime(fecha)} - ${asunto}`}
+            body={`CONSULTA: ${consulta}`}
+            finalizado={finalizado}
+            response={`RESPUESTA: ${respuesta}`}
+            refresh={this.RefreshTickets}
+        />
+    )
+
+    renderUserTicket = ({id, id_departamentos, id_usuarios, asunto, consulta, respuesta, finalizado, fecha}) => (
+        <SupportTicket key={id}
+            id={id}
+            color={finalizado==0 ? "danger" : "success"}
+            title={`#${id} - ${FormatDateTime(fecha)} - ${asunto}`}
+            body={`CONSULTA: ${consulta}`}
+            response={`RESPUESTA: ${respuesta}`}
+            finalizado={1}
+            refresh={this.RefreshTickets}
+        />
+    )
     render(){
         const { userData } = this.state;
+        const { tickets } = this.state;
+
         return(
             <div>
                 <AlertsHandler onRef={ref => (this.AlertsHandler = ref)} />
@@ -188,27 +231,27 @@ class Profile extends Component{
 
                     <Card>
                         {userData.level === 'user'?
-                        <Card.Header>Mis tickets enviados</Card.Header>
-                        :
-                        <Card.Header>Tickets recibidos</Card.Header>}
+                        <div><Card.Header>Mis tickets enviados</Card.Header>
 
                         <Card.Body>
                             <Accordion>
-                                <SupportTicket
-                                    id="0"
-                                    color="danger"
-                                    title="Ticket #923492"
-                                    body="Hola querido comité ARQ."
-                                />
-
-                                <SupportTicket
-                                    id="1"
-                                    color="success"
-                                    title="Ticket #843324"
-                                    body="Este es otro mensaje recibido."
-                                />
+                                {tickets != null?
+                                    tickets.map( this.renderUserTicket )
+                                    :
+                                    "No has enviado ningún ticket."}
                             </Accordion>
-                        </Card.Body>
+                        </Card.Body></div>
+                        :
+                        <div><Card.Header>Tickets recibidos</Card.Header>
+
+                        <Card.Body>
+                            <Accordion>
+                                {tickets != null?
+                                    tickets.map( this.renderTicket )
+                                    :
+                                    "No has recibido ningún ticket."}
+                            </Accordion>
+                        </Card.Body></div>}
                     </Card>
                 </CardDeck>
             </div>

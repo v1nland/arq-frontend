@@ -80,7 +80,7 @@ class SupportTicket extends Component{
 
                 <Modal show={showModal} onHide={this.HandleClose} animation={true}>
                     <Modal.Header>
-                        <Modal.Title>Responder Ticket {this.props.id}</Modal.Title>
+                        <Modal.Title>Responder Ticket #{this.props.id}</Modal.Title>
                     </Modal.Header>
 
                     <Modal.Body>

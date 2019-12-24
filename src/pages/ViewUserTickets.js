@@ -8,6 +8,7 @@ import AlertsHandler from '../components/Utility/AlertsHandler';
 import SupportTicket from '../components/Utility/SupportTicket';
 
 import { FetchTicketsDpto } from '../functions/Database';
+import { FormatDateTime } from '../functions/Helper'
 import { GetUserData } from '../functions/JWT';
 
 class ViewUserTickets extends Component{
@@ -42,7 +43,7 @@ class ViewUserTickets extends Component{
         <SupportTicket key={id}
             id={id}
             color={finalizado==0 ? "danger" : "success"}
-            title={`[Dpto. ${id}] ${asunto} - ${fecha}`}
+            title={`#${id} - ${FormatDateTime(fecha)} - ${asunto}`}
             body={`CONSULTA: ${consulta}`}
             response={`RESPUESTA: ${respuesta}`}
             finalizado={1}
@@ -55,7 +56,7 @@ class ViewUserTickets extends Component{
         return(
             <div>
                 <AlertsHandler onRef={ref => (this.AlertsHandler = ref)} />
-                <PageTitle text="Tickets recibidos" />
+                <PageTitle text="Tickets enviados" />
 
                 <Accordion>
                     {tickets != null?

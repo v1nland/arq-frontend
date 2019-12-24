@@ -8,6 +8,7 @@ import AlertsHandler from '../components/Utility/AlertsHandler';
 import SupportTicket from '../components/Utility/SupportTicket';
 
 import { FetchTickets } from '../functions/Database';
+import { FormatDateTime } from '../functions/Helper'
 
 class ViewTickets extends Component{
     constructor(props, context){
@@ -35,7 +36,7 @@ class ViewTickets extends Component{
         <SupportTicket key={id}
             id={id}
             color={finalizado==0 ? "danger" : "success"}
-            title={`[Dpto. ${id}] ${asunto} - ${fecha}`}
+            title={`#${id} - ${FormatDateTime(fecha)} - ${asunto}`}
             body={`CONSULTA: ${consulta}`}
             finalizado={finalizado}
             response={`RESPUESTA: ${respuesta}`}

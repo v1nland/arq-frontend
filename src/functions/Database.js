@@ -15,6 +15,25 @@ export function FetchDataTablesLang(){
     })
 }
 
+/**
+ * You first need to create a formatting function to pad numbers to two digits…
+ **/
+export function twoDigits(d) {
+    if(0 <= d && d < 10) return "0" + d.toString();
+    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+    return d.toString();
+}
+
+/**
+ * …and then create the method to output the date string as desired.
+ * Some people hate using prototypes this way, but if you are going
+ * to apply this to more than one Date object, having it as a prototype
+ * makes sense.
+ **/
+Date.prototype.toMysqlFormat = function() {
+    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(1) + " " + twoDigits(0) + ":" + twoDigits(0) + ":" + twoDigits(0);
+};
+
 /////////////////// BEGIN /////////////////////////
 /////////////////// CONDOMINIOS ///////////////////
 /////////////////// CONDOMINIOS ///////////////////
@@ -142,6 +161,17 @@ export function AnswerTicket( id, msg ){
     })
 }
 
+export function CountPendingTickets(){
+    return fetch(`${APIURL()}/Tickets/CountPending/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
 /////////////////// BEGIN /////////////////////////////
 /////////////////// MEDICIONES AGUA ///////////////////
 /////////////////// MEDICIONES AGUA ///////////////////
@@ -191,7 +221,24 @@ export function UpdateMedicionAgua( fecha, litros, id_dpto ){
 }
 
 export function DeleteMedicionAgua( id ){
-    return fetch(`${APIURL()}/MedicionesAgua/Delete/${id}/`)
+    return fetch(`${APIURL()}/MedicionesAgua/Delete/byID/${id}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function MonthMedicionesAgua(){
+    var cur_month = new Date().getMonth();
+    var cur_year = new Date().getFullYear();
+
+    var init_date = new Date(cur_year, cur_month+1, 0).toMysqlFormat()
+    var end_date = new Date(cur_year, cur_month+2, 0).toMysqlFormat()
+
+    return fetch(`${APIURL()}/MedicionesAgua/Suma/${init_date}/${end_date}/`)
     .then(response => response.json())
     .then(resp => {
         return resp
@@ -250,6 +297,70 @@ export function UpdateMulta( fecha, grado, monto, causa, id_dpto, id_mul ){
     })
 }
 
+export function MonthMultas(){
+    var cur_month = new Date().getMonth();
+    var cur_year = new Date().getFullYear();
+
+    var init_date = new Date(cur_year, cur_month+1, 0).toMysqlFormat()
+    var end_date = new Date(cur_year, cur_month+2, 0).toMysqlFormat()
+    console.log(`${APIURL()}/Multas/ContarFecha/${init_date}/${end_date}/`);
+    return fetch(`${APIURL()}/Multas/ContarFecha/${init_date}/${end_date}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+/////////////////// BEGIN //////////////////////////////
+///////////////////// GC ///////////////////////////////
+///////////////////// GC ///////////////////////////////
+export function FetchGC(){
+    return fetch(`${APIURL()}/GastosComunes/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function FetchGCByDptoID(dpto_id){
+    return fetch(`${APIURL()}/GastosComunes/byDptoID/${dpto_id}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function FetchSumaGCByDptoID(dpto_id){
+    return fetch(`${APIURL()}/GastosComunes/SumabyID/${dpto_id}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function InsertGC( cod_cond, num_dpto, monto, detalle ){
+    return fetch(`${APIURL()}/GastosComunes/Insertar/${monto}/${detalle}/${num_dpto}/${cod_cond}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
 /////////////////// BEGIN /////////////////////////////////
 /////////////////// PAGOS GASTOSCOMUNES ///////////////////
 /////////////////// PAGOS GASTOSCOMUNES ///////////////////
@@ -275,6 +386,28 @@ export function FetchPagosGCByID(id){
     })
 }
 
+export function FetchPagosGCByDptoID(dpto_id){
+    return fetch(`${APIURL()}/PagosGC/byDptoID/${dpto_id}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function FetchSumaPagosGCByDptoID(dpto_id){
+    return fetch(`${APIURL()}/PagosGC/SumabyID/${dpto_id}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
 export function InsertPagosGC( cod_cond, num_dpto, monto ){
     return fetch(`${APIURL()}/PagosGC/Insertar/${monto}/${num_dpto}/${cod_cond}/`)
     .then(response => response.json())
@@ -289,6 +422,23 @@ export function InsertPagosGC( cod_cond, num_dpto, monto ){
 export function UpdatePagosGC( fecha, monto, id_dpto, id_pago ){
     console.log(`${APIURL()}/PagosGC/Update/${monto}/${fecha}/${id_dpto}/${id_pago}/`);
     return fetch(`${APIURL()}/PagosGC/Update/${monto}/${fecha}/${id_dpto}/${id_pago}/`)
+    .then(response => response.json())
+    .then(resp => {
+        return resp
+    })
+    .catch(err => {
+        return err
+    })
+}
+
+export function MonthPagosGC(){
+    var cur_month = new Date().getMonth();
+    var cur_year = new Date().getFullYear();
+
+    var init_date = new Date(cur_year, cur_month+1, 0).toMysqlFormat()
+    var end_date = new Date(cur_year, cur_month+2, 0).toMysqlFormat()
+
+    return fetch(`${APIURL()}/PagosGC/Suma/${init_date}/${end_date}/`)
     .then(response => response.json())
     .then(resp => {
         return resp

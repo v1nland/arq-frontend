@@ -69,18 +69,6 @@ class Neighbors extends Component{
                     width: 150
                 },
                 {
-                    label: 'Bodega',
-                    field: 'bodega',
-                    sort: 'asc',
-                    width: 100
-                },
-                {
-                    label: 'Estacionamiento',
-                    field: 'estacionamiento',
-                    sort: 'asc',
-                    width: 100
-                },
-                {
                     label: 'Prorrateo (%)',
                     field: 'prorrateo',
                     sort: 'asc',

@@ -17,6 +17,9 @@ import PageTitle from '../components/Utility/PageTitle';
 import AlertsHandler from '../components/Utility/AlertsHandler';
 import { Tooltip, XAxis, YAxis, Area, CartesianGrid, AreaChart, Bar, ResponsiveContainer } from '../vendor/recharts';
 
+import { MonthMultas, CountPendingTickets, MonthPagosGC, MonthMedicionesAgua } from '../functions/Database';
+import { NumberWithDots } from '../functions/Helper';
+
 const data = [
       { name: 'Page A', uv: 4000, pv: 2400, amt: 2400, value: 600 },
       { name: 'Page B', uv: 3000, pv: 1398, amt: 2210, value: 300 },
@@ -31,6 +34,10 @@ class Dashboard extends Component {
         this.state = {
             done: false,
             usrLevel: '',
+            ticketsCount: 0,
+            monthPagosGC: 0,
+            monthMedicionesAgua: 0,
+            multasCount: 0,
         }
     }
 
@@ -38,6 +45,26 @@ class Dashboard extends Component {
         GetUserPermissions()
         .then(res => {
             this.setState({ usrLevel: res, done: true })
+        })
+
+        MonthMultas()
+        .then(r => {
+            this.setState({ multasCount: r.rows[0].cuenta})
+        })
+
+        CountPendingTickets()
+        .then(r => {
+            this.setState({ ticketsCount: r.count})
+        })
+
+        MonthPagosGC()
+        .then(r => {
+            this.setState({ monthPagosGC: r.rows[0].suma})
+        })
+
+        MonthMedicionesAgua()
+        .then(r => {
+            this.setState({ monthMedicionesAgua: r.rows[0].suma})
         })
     }
 
@@ -62,17 +89,17 @@ class Dashboard extends Component {
                                 <StatWidget
                                     color="primary"
                                     icon="fa fa-comments fa-3x"
-                                    count="29"
-                                    headerText="Comentarios"
+                                    count={NumberWithDots(this.state.multasCount)}
+                                    headerText="Multas cursadas en el mes"
                                     footerText="Ver detalles"
-                                    linkTo="/#/"
+                                    linkTo="/#/Penalties"
                                 />
 
                                 <StatWidget
                                     color="danger"
                                     icon="fa fa-shopping-cart fa-3x"
-                                    count="124"
-                                    headerText="Gastos comunes"
+                                    count={'$'+NumberWithDots(this.state.monthPagosGC)}
+                                    headerText="Pagos de gastos comunes del mes"
                                     footerText="Ver detalles"
                                     linkTo="/#/CommonExpensesBalance"
                                 />
@@ -80,17 +107,17 @@ class Dashboard extends Component {
                                 <StatWidget
                                     color="success"
                                     icon="fa fa-tasks fa-3x"
-                                    count="12"
-                                    headerText="Tareas"
+                                    count={NumberWithDots(this.state.monthMedicionesAgua)}
+                                    headerText="Litros de agua utilizados"
                                     footerText="Ver detalles"
-                                    linkTo="/#/"
+                                    linkTo="/#/WaterMeasure"
                                 />
 
                                 <StatWidget
                                     color="warning"
                                     icon="fa fa-ticket fa-3x"
-                                    count="13"
-                                    headerText="Tickets"
+                                    count={NumberWithDots(this.state.ticketsCount)}
+                                    headerText="Tickets pendientes de respuesta"
                                     footerText="Ver detalles"
                                     linkTo="/#/ViewTickets"
                                 />
@@ -100,7 +127,7 @@ class Dashboard extends Component {
 
                     <br />
 
-                    <Row>
+                    {/*<Row>
                         <Col>
                             <Card>
                                 <Card.Header>Gráfico</Card.Header>
@@ -163,7 +190,7 @@ class Dashboard extends Component {
                                 </div>
                             </Card>
                         </Col>
-                    </Row>
+                    </Row>*/}
                 </div>
                 :
                 <CenteredSpinner />}

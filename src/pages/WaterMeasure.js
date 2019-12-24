@@ -22,6 +22,8 @@ class WaterMeasure extends Component{
         this.HandleClose = this.HandleClose.bind(this);
         this.HandleInsertMedicionAgua = this.HandleInsertMedicionAgua.bind(this);
 
+        this.HandleDeleteMedicion = this.HandleDeleteMedicion.bind(this);
+
         this.HandleCSV = this.HandleCSV.bind(this);
         this.HandleShowCSV = this.HandleShowCSV.bind(this);
         this.HandleCloseCSV = this.HandleCloseCSV.bind(this);
@@ -70,7 +72,6 @@ class WaterMeasure extends Component{
             if (res.count === 0) {
                 this.AlertsHandler.generate('success', 'Medición eliminada', 'Se eliminó la medición.');
                 this.RefreshMedicionesAgua()
-                this.HandleCloseEdit()
             }else{
                 this.AlertsHandler.generate('danger', 'Medición no eliminada', '¡Ocurrió un error! Intenta más tarde.');
             }

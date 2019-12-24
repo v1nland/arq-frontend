@@ -27,7 +27,7 @@ class Navigation extends Component{
         return(
             <div className="nav-side-menu">
                 <div className="brand">
-                    <FontAwesomeIcon icon={faBuilding} fixedWidth /> Te administro &nbsp; &nbsp; &nbsp;
+                    <FontAwesomeIcon icon={faBuilding} fixedWidth /> Te Administro &nbsp; &nbsp; &nbsp;
                 </div>
 
                 <FontAwesomeIcon className='toggle-btn' icon={faBars} fixedWidth data-toggle="collapse" data-target="#menu-content" />

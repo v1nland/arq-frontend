@@ -14,7 +14,6 @@ import CommonExpensesPayments from './pages/CommonExpensesPayments';
 import CommonExpensesBalance from './pages/CommonExpensesBalance';
 import CommonSpaces from './pages/CommonSpaces';
 import WaterMeasure from './pages/WaterMeasure';
-// import UploadCommonExpenses from './pages/UploadCommonExpenses';
 
 class App extends Component {
     render(){
@@ -31,7 +30,6 @@ class App extends Component {
                                         <Route exact path="/ViewTickets" component={ ViewTickets } />
                                         <Route exact path="/ViewUserTickets" component={ ViewUserTickets } />
                                         <Route exact path="/Penalties" component={ Penalties } />
-                                        { /* <Route exact path="/UploadCommonExpenses" component={ UploadCommonExpenses } /> */ }
                                         <Route exact path="/CommonExpensesPayments" component={ CommonExpensesPayments } />
                                         <Route exact path="/CommonExpensesBalance" component={ CommonExpensesBalance } />
                                         <Route exact path="/CommonSpaces" component={ CommonSpaces } />

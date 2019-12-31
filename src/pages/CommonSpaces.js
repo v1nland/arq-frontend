@@ -10,6 +10,7 @@ import AlertsHandler from '../components/Utility/AlertsHandler';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FetchEspaciosComunes, FetchEspaciosComunesByID, FetchDataTablesLang, InsertEspacioComun, UpdateEspacioComun } from '../functions/Database';
+import { GetUserPermissions } from '../functions/JWT';
 
 class CommonSpaces extends Component{
     constructor(props, context){
@@ -28,6 +29,7 @@ class CommonSpaces extends Component{
 
         this.state = {
             espaciosComunes: [],
+            espaciosComunesHelper: [],
             dtlang: [],
             showModal: false,
             showEditModal: false,
@@ -49,13 +51,20 @@ class CommonSpaces extends Component{
         FetchEspaciosComunes()
         .then(res => {
             this.setState({ espaciosComunes: res.rows }, () => {
-                for (var i = 0; i < this.state.espaciosComunes.length; i++) {
-                    var cur_id = this.state.espaciosComunes[i]['id']
-
-                    this.state.espaciosComunes[i]['acciones'] = <Button size="sm" id={cur_id} onClick={this.HandleEditModalData}><FontAwesomeIcon icon={faEdit} /></Button>
+                // for (var i = 0; i < this.state.espaciosComunes.length; i++) {
+                for (const espacioComun of this.state.espaciosComunes){
+                    GetUserPermissions()
+                    .then(res => {
+                        console.log(res);
+                        if ( res === 'admin' ) {
+                            espacioComun['acciones'] = <Button size="sm" id={espacioComun.id} onClick={this.HandleEditModalData}><FontAwesomeIcon icon={faEdit} /></Button>
+                        }
+                    })
+                    .then(_ => {
+                        this.setState({ espaciosComunesFinal: this.state.espaciosComunes })
+                    })
                 }
             })
-            console.log( this.state.espaciosComunes );
         })
     }
 
@@ -133,6 +142,7 @@ class CommonSpaces extends Component{
 
     render(){
         const { espaciosComunes } = this.state;
+        const { espaciosComunesFinal } = this.state;
         const { dtlang } = this.state;
         const { showModal } = this.state;
         const { showEditModal } = this.state;
@@ -177,7 +187,7 @@ class CommonSpaces extends Component{
                     width: 50
                 }
             ],
-            rows: espaciosComunes,
+            rows: espaciosComunesFinal,
             language: dtlang
         };
 
